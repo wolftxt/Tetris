@@ -25,6 +25,7 @@ public class TetrisWidget extends JComponent {
     }
 
     private void generateColors() {
+        pieceColors = new Color[TetrisPlan.PIECE_COUNT];
         Random r = new Random();
         for (int i = 0; i < TetrisPlan.PIECE_COUNT; i++) {
             int red = r.nextInt(256);
@@ -48,7 +49,7 @@ public class TetrisWidget extends JComponent {
         int s = getScaling(board.length, board[0].length);
 
         g.setColor(BACKGROUND_COLOR);
-        g.drawRect(0, 0, this.getWidth(), this.getHeight());
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[0].length; y++) {
                 g.setColor(GRID_COLOR);
@@ -57,7 +58,7 @@ public class TetrisWidget extends JComponent {
                     continue;
                 }
                 g.setColor(pieceColors[board[x][y]]);
-                g.drawRect(x * s, y * s, s, s);
+                g.fillRect(x * s, y * s, s, s);
             }
         }
     }

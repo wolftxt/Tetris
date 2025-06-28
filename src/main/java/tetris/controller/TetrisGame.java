@@ -22,13 +22,14 @@ public class TetrisGame {
     private void gameLoop(TetrisWidget callback) {
         Thread.ofVirtual().start(() -> {
             try {
-                Thread.sleep(1000);
                 while (plan.isPlaying()) {
+                    Thread.sleep(1000);
                     if (!plan.moveDown()) {
                         plan.placePiece();
                         plan.newPiece();
                         plan.newNextPiece();
                     }
+                    callback.repaint();
                 }
             } catch (InterruptedException ex) {
                 System.err.println("Game loop thread got unexpectedly interrupted");

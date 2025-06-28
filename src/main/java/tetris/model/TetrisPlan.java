@@ -30,7 +30,6 @@ public class TetrisPlan {
             Arrays.fill(board[x], -1);
         }
         playing = true;
-        newNextPiece();
     }
 
     public int[][] getBoard() {
