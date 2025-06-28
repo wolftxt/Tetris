@@ -19,8 +19,12 @@ public class TetrisWidget extends JComponent {
         newGame();
     }
 
+    public TetrisGame getGame() {
+        return game;
+    }
+
     public void newGame() {
-        this.game = new TetrisGame(this);
+        this.game = new TetrisGame(this, 1000);
         generateColors();
     }
 

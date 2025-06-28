@@ -34,6 +34,9 @@
   </Layout>
   <SubComponents>
     <Container class="tetris.view.TetrisWidget" name="tetrisWidget1">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tetrisWidget1KeyReleased"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
         <Property name="useNullLayout" type="boolean" value="true"/>

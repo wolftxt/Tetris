@@ -32,6 +32,10 @@ public class TetrisPlan {
         playing = true;
     }
 
+    public Piece getPiece() {
+        return piece;
+    }
+
     public int[][] getBoard() {
         // Clone board array
         int[][] result = new int[board.length][];
@@ -46,7 +50,7 @@ public class TetrisPlan {
                 if (value == -1) {
                     continue;
                 }
-                board[x + xStart][y + yStart] = value;
+                result[x + xStart][y + yStart] = value;
             }
         }
 
@@ -54,6 +58,9 @@ public class TetrisPlan {
     }
 
     public void newPiece() {
+        if (piece != null) {
+            throw new RuntimeException("Tried to make a new piece but a piece already exists");
+        }
         switch (next) {
             case 0 -> {
                 piece = PieceFactory.createSquarePiece();
@@ -79,6 +86,8 @@ public class TetrisPlan {
             default ->
                 throw new RuntimeException("Invalid next piece number");
         }
+        next = -1; // Impossible value to make sure the same piece isn't used twice in a row
+
         xStart = WIDTH / 2 - piece.getSize() / 2;
         yStart = 0;
         if (!isLegal(0, 0)) {
@@ -91,11 +100,12 @@ public class TetrisPlan {
         next = r.nextInt(PIECE_COUNT);
     }
 
-    public boolean moveDown() {
-        if (!isLegal(0, 1)) {
+    public boolean move(int x, int y) {
+        if (!isLegal(x, y)) {
             return false;
         }
-        yStart++;
+        xStart += x;
+        yStart += y;
         return true;
     }
 
@@ -116,7 +126,7 @@ public class TetrisPlan {
         return playing;
     }
 
-    private boolean isLegal(int xOffset, int yOffset) {
+    public boolean isLegal(int xOffset, int yOffset) {
         int xStart = this.xStart + xOffset;
         int yStart = this.yStart + yOffset;
         for (int x = 0; x < piece.getSize(); x++) {
