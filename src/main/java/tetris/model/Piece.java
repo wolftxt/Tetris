@@ -1,4 +1,4 @@
-package tetris;
+package tetris.model;
 
 public class Piece {
 
@@ -10,8 +10,16 @@ public class Piece {
         }
         this.shape = shape;
     }
-    
-    public void rotate(){
+
+    public int getSize() {
+        return shape.length;
+    }
+
+    public int getValueAt(int x, int y) {
+        return shape[x][y];
+    }
+
+    public void rotate() {
         for (int x = 0; x < shape.length / 2; x++) {
             int ndIndex = shape.length - x - 1;
             int[] temp = shape[x];

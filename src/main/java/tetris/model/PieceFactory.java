@@ -1,4 +1,4 @@
-package tetris;
+package tetris.model;
 
 public class PieceFactory {
 
@@ -32,7 +32,7 @@ public class PieceFactory {
         return new Piece(shape);
     }
 
-    public static Piece createIPiece() {
+    public static Piece createLinePiece() {
         int[][] shape = {{-1, -1, -1, -1}, {6, 6, 6, 6}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
         return new Piece(shape);
     }

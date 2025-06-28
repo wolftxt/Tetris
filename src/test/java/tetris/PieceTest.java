@@ -1,5 +1,6 @@
 package tetris;
 
+import tetris.model.Piece;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
