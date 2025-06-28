@@ -22,14 +22,38 @@ public class TetrisGame {
         return plan;
     }
 
+    public void hardDrop() {
+        if (!plan.isPlaying()) {
+            return;
+        }
+        while (plan.move(0, 1)) {
+        }
+        plan.placePiece();
+        plan.newPiece();
+        plan.newNextPiece();
+        this.callback.repaint();
+    }
+
     public void rotate(int rotateTimes) {
+        if (!plan.isPlaying()) {
+            return;
+        }
         for (int i = 0; i < rotateTimes; i++) {
             plan.getPiece().rotate();
+        }
+        if (!plan.move(0, 0)) {
+            for (int i = 0; i < 4 - rotateTimes; i++) {
+                plan.getPiece().rotate();
+            }
+            return;
         }
         this.callback.repaint();
     }
 
     public void moveDirection(int direction) {
+        if (!plan.isPlaying()) {
+            return;
+        }
         plan.move(direction, 0);
         callback.repaint();
     }
