@@ -120,6 +120,26 @@ public class TetrisPlan {
             }
         }
         this.piece = null; // Ensures NullPointerException will be trown if code tries to use the non-existant piece
+
+        // clear lines
+        int[][] newBoard = new int[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x++) {
+            Arrays.fill(newBoard[x], -1);
+        }
+        int lineIndex = HEIGHT - 1;
+        for (int y = HEIGHT - 1; y >= 0; y--) {
+            boolean clear = true;
+            for (int x = 0; x < WIDTH; x++) {
+                clear = clear && board[x][y] != -1;
+            }
+            if (!clear) {
+                for (int x = 0; x < WIDTH; x++) {
+                    newBoard[x][lineIndex] = board[x][y];
+                }
+                lineIndex--;
+            }
+        }
+        board = newBoard;
     }
 
     public boolean isPlaying() {
