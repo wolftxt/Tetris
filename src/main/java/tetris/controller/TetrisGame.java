@@ -15,6 +15,10 @@ public class TetrisGame {
         gameLoop(callback);
     }
 
+    public TetrisPlan getPlan() {
+        return plan;
+    }
+
     private void gameLoop(TetrisWidget callback) {
         Thread.ofVirtual().start(() -> {
             try {

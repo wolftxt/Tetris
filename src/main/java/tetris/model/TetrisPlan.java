@@ -33,6 +33,27 @@ public class TetrisPlan {
         newNextPiece();
     }
 
+    public int[][] getBoard() {
+        // Clone board array
+        int[][] result = new int[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            result[i] = board[i].clone();
+        }
+
+        // Place piece on board
+        for (int x = 0; x < piece.getSize(); x++) {
+            for (int y = 0; y < piece.getSize(); y++) {
+                int value = piece.getValueAt(x, y);
+                if (value == -1) {
+                    continue;
+                }
+                board[x + xStart][y + yStart] = value;
+            }
+        }
+
+        return result;
+    }
+
     public void newPiece() {
         switch (next) {
             case 0 -> {
@@ -89,7 +110,7 @@ public class TetrisPlan {
                 board[x + xStart][y + yStart] = value;
             }
         }
-        this.piece = null; // Ensures NullPointerException will be trown if something goes wrong
+        this.piece = null; // Ensures NullPointerException will be trown if code tries to use the non-existant piece
     }
 
     public boolean isPlaying() {
