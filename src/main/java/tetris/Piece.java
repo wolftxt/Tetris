@@ -2,7 +2,7 @@ package tetris;
 
 public class Piece {
 
-    private int[][] shape;
+    public int[][] shape;
 
     public Piece(int[][] shape) {
         if (shape.length != shape[0].length) {

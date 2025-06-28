@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * A class used to store the game state of the tetris game. State is stored in
- * the int[][] board array where: -2 means moving, -1 means empty, everything
+ * the int[][] board array where: -1 means empty, everything
  * else means occupied (more numbers for different colors)
  *
  * @author davidwolf
@@ -28,7 +28,7 @@ public class TetrisPlan {
     }
 
     public boolean newPiece() {
-
+        throw new RuntimeException("NOT yet implemented");
     }
 
     public void newNextPiece() {
