@@ -1,5 +1,6 @@
 package tetris.view;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -93,6 +94,7 @@ public class TetrisWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_tetrisWidget1KeyPressed
 
     public static void main(String args[]) {
+        FlatDarkLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
             JFrame window = new TetrisWindow();
             window.setVisible(true);

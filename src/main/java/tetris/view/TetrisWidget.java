@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.swing.JComponent;
 import tetris.controller.TetrisGame;
 import tetris.model.TetrisPlan;
+import tetris.settings.UISettings;
 
 public class TetrisWidget extends JComponent {
 
@@ -13,7 +14,7 @@ public class TetrisWidget extends JComponent {
     private static final Color GRID_COLOR = Color.BLACK;
 
     private TetrisGame game;
-    private Color[] pieceColors;
+    private Color[] pieceColors = {Color.YELLOW, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.RED, Color.GREEN, Color.CYAN};
 
     public TetrisWidget() {
         newGame(2000);
@@ -25,10 +26,12 @@ public class TetrisWidget extends JComponent {
 
     public void newGame(int timeToFall) {
         this.game = new TetrisGame(this, timeToFall);
-        generateColors();
+        if (UISettings.getInstance().randomColors) {
+            generateRandomColors();
+        }
     }
 
-    private void generateColors() {
+    private void generateRandomColors() {
         pieceColors = new Color[TetrisPlan.PIECE_COUNT];
         Random r = new Random();
         for (int i = 0; i < TetrisPlan.PIECE_COUNT; i++) {
@@ -58,10 +61,6 @@ public class TetrisWidget extends JComponent {
 
         int s = getScaling(board.length, board[0].length);
         int xOffset = getXOffset(board.length, board[0].length);
-
-        // Draw background
-        g.setColor(BACKGROUND_COLOR);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         // Draw board
         for (int x = 0; x < board.length; x++) {
