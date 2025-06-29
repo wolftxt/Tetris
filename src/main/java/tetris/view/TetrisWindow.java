@@ -50,12 +50,6 @@ public class TetrisWindow extends javax.swing.JFrame {
     private void tetrisWidget1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyReleased
         TetrisGame game = tetrisWidget1.getGame();
         switch (evt.getKeyCode()) {
-            case KeyEvent.VK_LEFT -> {
-                game.moveDirection(-1);
-            }
-            case KeyEvent.VK_RIGHT -> {
-                game.moveDirection(1);
-            }
             case KeyEvent.VK_SPACE -> {
                 game.hardDrop();
             }
@@ -82,6 +76,12 @@ public class TetrisWindow extends javax.swing.JFrame {
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_DOWN -> {
                 game.softDrop();
+            }
+            case KeyEvent.VK_LEFT -> {
+                game.moveDirection(-1);
+            }
+            case KeyEvent.VK_RIGHT -> {
+                game.moveDirection(1);
             }
         }
     }//GEN-LAST:event_tetrisWidget1KeyPressed
