@@ -4,10 +4,16 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JFrame;
 import tetris.controller.TetrisGame;
+import tetris.settings.ControllsSettings;
 
 public class TetrisWindow extends javax.swing.JFrame {
+
+    private Map<Integer, Runnable> releasedKeys;
+    private Map<Integer, Runnable> pressedKeys;
 
     public TetrisWindow() {
         initComponents();
@@ -16,6 +22,30 @@ public class TetrisWindow extends javax.swing.JFrame {
                 tetrisWidget1.requestFocusInWindow();
             }
         });
+        initMaps();
+    }
+
+    public void initMaps() {
+        ControllsSettings cs = ControllsSettings.getInstance();
+        TetrisGame game = tetrisWidget1.getGame();
+
+        // Released keys map
+        releasedKeys = new HashMap();
+        releasedKeys.put(cs.hardDropKey, () -> game.hardDrop());
+        releasedKeys.put(cs.holdKey, () -> game.hold());
+        releasedKeys.put(cs.clockwiseKey, () -> game.rotate(3));
+        releasedKeys.put(cs.clockwiseKeyAlternative, () -> game.rotate(3));
+        releasedKeys.put(cs.rotate180Key, () -> game.rotate(2));
+
+        releasedKeys.put(KeyEvent.VK_H, () -> Popups.help());
+        releasedKeys.put(KeyEvent.VK_N, () -> tetrisWidget1.newGame(Popups.getGameSpeed()));
+
+        // Pressed keys map
+        pressedKeys = new HashMap();
+        pressedKeys.put(cs.softDropKey, () -> game.softDrop());
+        pressedKeys.put(cs.leftKey, () -> game.moveDirection(-1));
+        pressedKeys.put(cs.rightKey, () -> game.moveDirection(1));
+        pressedKeys.put(cs.softDropKey, () -> game.softDrop());
     }
 
     @SuppressWarnings("unchecked")
@@ -50,47 +80,13 @@ public class TetrisWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tetrisWidget1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyReleased
-        TetrisGame game = tetrisWidget1.getGame();
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_SPACE -> {
-                game.hardDrop();
-            }
-            case KeyEvent.VK_C -> {
-                game.hold();
-            }
-            case KeyEvent.VK_UP -> {
-                game.rotate(3); // rotate 3 times to rotate clockwise
-            }
-            case KeyEvent.VK_F -> {
-                game.rotate(3); // rotate 3 times to rotate clockwise
-            }
-            case KeyEvent.VK_D -> {
-                game.rotate(2); // rotate 2 times to rotate 180°
-            }
-            case KeyEvent.VK_S -> {
-                game.rotate(1); // rotate 1 time to rotate counter-clockwise
-            }
-
-            case KeyEvent.VK_N -> {
-                int timeToFall = Popups.getGameSpeed();
-                tetrisWidget1.newGame(timeToFall);
-            }
-        }
+        releasedKeys.getOrDefault(evt.getKeyCode(), () -> {
+        }).run();
     }//GEN-LAST:event_tetrisWidget1KeyReleased
 
     private void tetrisWidget1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyPressed
-        TetrisGame game = tetrisWidget1.getGame();
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_DOWN -> {
-                game.softDrop();
-            }
-            case KeyEvent.VK_LEFT -> {
-                game.moveDirection(-1);
-            }
-            case KeyEvent.VK_RIGHT -> {
-                game.moveDirection(1);
-            }
-        }
+        pressedKeys.getOrDefault(evt.getKeyCode(), () -> {
+        }).run();
     }//GEN-LAST:event_tetrisWidget1KeyPressed
 
     public static void main(String args[]) {
