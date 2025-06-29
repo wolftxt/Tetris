@@ -16,15 +16,15 @@ public class TetrisWidget extends JComponent {
     private Color[] pieceColors;
 
     public TetrisWidget() {
-        newGame();
+        newGame(2000);
     }
 
     public TetrisGame getGame() {
         return game;
     }
 
-    public void newGame() {
-        this.game = new TetrisGame(this, 2000);
+    public void newGame(int timeToFall) {
+        this.game = new TetrisGame(this, timeToFall);
         generateColors();
     }
 

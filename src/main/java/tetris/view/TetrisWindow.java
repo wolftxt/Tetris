@@ -3,6 +3,7 @@ package tetris.view;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import tetris.controller.TetrisGame;
 
 public class TetrisWindow extends javax.swing.JFrame {
@@ -37,11 +38,11 @@ public class TetrisWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE)
+            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
         );
 
         pack();
@@ -68,6 +69,11 @@ public class TetrisWindow extends javax.swing.JFrame {
             case KeyEvent.VK_S -> {
                 game.rotate(1); // rotate 1 time to rotate counter-clockwise
             }
+
+            case KeyEvent.VK_N -> {
+                int timeToFall = Popups.getGameSpeed();
+                tetrisWidget1.newGame(timeToFall);
+            }
         }
     }//GEN-LAST:event_tetrisWidget1KeyReleased
 
@@ -87,7 +93,12 @@ public class TetrisWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_tetrisWidget1KeyPressed
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> new TetrisWindow().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            JFrame window = new TetrisWindow();
+            window.setVisible(true);
+            Popups.parent = window;
+            Popups.help();
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
