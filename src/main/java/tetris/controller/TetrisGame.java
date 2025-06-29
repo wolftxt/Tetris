@@ -8,7 +8,6 @@ public class TetrisGame {
     private TetrisPlan plan;
     private TetrisWidget callback;
 
-    private Thread thread;
     private boolean softDrop;
 
     public TetrisGame(TetrisWidget callback, int timeToFall) {
@@ -44,6 +43,12 @@ public class TetrisGame {
         callback.repaint();
     }
 
+    public void hold() {
+        if (plan.hold()) {
+            this.callback.repaint();
+        }
+    }
+
     public void rotate(int rotateTimes) {
         if (!plan.isPlaying()) {
             return;
@@ -69,7 +74,7 @@ public class TetrisGame {
     }
 
     private void gameLoop(int timeToFall) {
-        this.thread = Thread.ofVirtual().start(() -> {
+        Thread.ofVirtual().start(() -> {
             while (plan.isPlaying()) {
                 try {
                     int time = softDrop ? timeToFall / 10 : timeToFall;

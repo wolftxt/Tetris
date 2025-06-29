@@ -22,6 +22,8 @@ public class TetrisPlan {
     private int yStart;
 
     private int next;
+    private int hold;
+    private boolean usedHold;
     private boolean playing;
 
     public TetrisPlan() {
@@ -29,7 +31,30 @@ public class TetrisPlan {
         for (int x = 0; x < board.length; x++) {
             Arrays.fill(board[x], -1);
         }
+        hold = -1;
         playing = true;
+    }
+
+    public boolean hold() {
+        if (usedHold) {
+            return false;
+        }
+        if (hold == -1) {
+            hold = piece.getIndex();
+            piece = null;
+            newPiece();
+            newNextPiece();
+            usedHold = true;
+            return true;
+        }
+        int temp = next;
+        next = hold;
+        hold = piece.getIndex();
+        piece = null;
+        newPiece();
+        next = temp;
+        usedHold = true;
+        return true;
     }
 
     public Piece getPiece() {
@@ -58,34 +83,11 @@ public class TetrisPlan {
     }
 
     public void newPiece() {
+        usedHold = false;
         if (piece != null) {
             throw new RuntimeException("Tried to make a new piece but a piece already exists");
         }
-        switch (next) {
-            case 0 -> {
-                piece = PieceFactory.createSquarePiece();
-            }
-            case 1 -> {
-                piece = PieceFactory.createLPiece();
-            }
-            case 2 -> {
-                piece = PieceFactory.createJPiece();
-            }
-            case 3 -> {
-                piece = PieceFactory.createTPiece();
-            }
-            case 4 -> {
-                piece = PieceFactory.createSPiece();
-            }
-            case 5 -> {
-                piece = PieceFactory.createZPiece();
-            }
-            case 6 -> {
-                piece = PieceFactory.createLinePiece();
-            }
-            default ->
-                throw new RuntimeException("Invalid next piece number");
-        }
+        piece = PieceFactory.createPiece(next);
         next = -1; // Impossible value to make sure the same piece isn't used twice in a row
 
         xStart = WIDTH / 2 - piece.getSize() / 2;

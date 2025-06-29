@@ -59,6 +59,9 @@ public class TetrisWindow extends javax.swing.JFrame {
             case KeyEvent.VK_SPACE -> {
                 game.hardDrop();
             }
+            case KeyEvent.VK_C -> {
+                game.hold();
+            }
             case KeyEvent.VK_UP -> {
                 game.rotate(3); // rotate 3 times to rotate clockwise
             }

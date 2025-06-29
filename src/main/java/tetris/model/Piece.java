@@ -2,17 +2,23 @@ package tetris.model;
 
 public class Piece {
 
-    public int[][] shape;
+    private int[][] shape;
+    private int index;
 
-    public Piece(int[][] shape) {
+    public Piece(int[][] shape, int index) {
         if (shape.length != shape[0].length) {
             throw new RuntimeException("Shape array must be a square matrix");
         }
         this.shape = shape;
+        this.index = index;
     }
 
     public int getSize() {
         return shape.length;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public int getValueAt(int x, int y) {

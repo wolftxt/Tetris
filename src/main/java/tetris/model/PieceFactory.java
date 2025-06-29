@@ -2,38 +2,66 @@ package tetris.model;
 
 public class PieceFactory {
 
+    public static Piece createPiece(int index) {
+        switch (index) {
+            case 0 -> {
+                return PieceFactory.createSquarePiece();
+            }
+            case 1 -> {
+                return PieceFactory.createLPiece();
+            }
+            case 2 -> {
+                return PieceFactory.createJPiece();
+            }
+            case 3 -> {
+                return PieceFactory.createTPiece();
+            }
+            case 4 -> {
+                return PieceFactory.createSPiece();
+            }
+            case 5 -> {
+                return PieceFactory.createZPiece();
+            }
+            case 6 -> {
+                return PieceFactory.createLinePiece();
+            }
+            default ->
+                throw new RuntimeException("Invalid next piece number");
+        }
+    }
+
     public static Piece createSquarePiece() {
         int[][] shape = {{0, 0}, {0, 0}};
-        return new Piece(shape);
+        return new Piece(shape, 0);
     }
 
     public static Piece createLPiece() {
         int[][] shape = {{1, -1, -1}, {1, 1, 1}, {-1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 1);
     }
 
     public static Piece createJPiece() {
         int[][] shape = {{-1, -1, 2}, {2, 2, 2}, {-1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 2);
     }
 
     public static Piece createTPiece() {
         int[][] shape = {{-1, 3, -1}, {3, 3, 3}, {-1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 3);
     }
 
     public static Piece createSPiece() {
         int[][] shape = {{-1, 4, 4}, {4, 4, -1}, {-1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 4);
     }
 
     public static Piece createZPiece() {
         int[][] shape = {{5, 5, -1}, {-1, 5, 5}, {-1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 5);
     }
 
     public static Piece createLinePiece() {
         int[][] shape = {{-1, -1, -1, -1}, {6, 6, 6, 6}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
-        return new Piece(shape);
+        return new Piece(shape, 6);
     }
 }
