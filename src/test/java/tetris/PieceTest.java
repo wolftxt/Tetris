@@ -13,20 +13,20 @@ public class PieceTest {
     @org.junit.Test
     public void testRotate() {
         int[][] original = {{-1, -1, -1, -1}, {6, 6, 6, 6}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
-        Piece piece = new Piece(original);
-        
+        Piece piece = new Piece(original, 6);
+
         piece.rotate();
         int[][] result = {{-1, -1, 6, -1}, {-1, -1, 6, -1}, {-1, -1, 6, -1}, {-1, -1, 6, -1}};
         testEquality(piece.shape, result);
-        
+
         piece.rotate();
         result = new int[][]{{-1, -1, -1, -1}, {-1, -1, -1, -1}, {6, 6, 6, 6}, {-1, -1, -1, -1}};
         testEquality(piece.shape, result);
-        
+
         piece.rotate();
         result = new int[][]{{-1, 6, -1, -1}, {-1, 6, -1, -1}, {-1, 6, -1, -1}, {-1, 6, -1, -1}};
         testEquality(piece.shape, result);
-        
+
         piece.rotate();
         testEquality(piece.shape, original);
     }

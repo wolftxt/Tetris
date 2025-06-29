@@ -30,6 +30,11 @@ public class PieceFactory {
         }
     }
 
+    public static Piece createEmptyPiece() {
+        int[][] shape = {{-1, -1}, {-1, -1}};
+        return new Piece(shape, -1);
+    }
+
     public static Piece createSquarePiece() {
         int[][] shape = {{0, 0}, {0, 0}};
         return new Piece(shape, 0);

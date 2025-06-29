@@ -2,7 +2,7 @@ package tetris.model;
 
 public class Piece {
 
-    private int[][] shape;
+    public int[][] shape;
     private int index;
 
     public Piece(int[][] shape, int index) {

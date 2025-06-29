@@ -35,6 +35,38 @@ public class TetrisPlan {
         playing = true;
     }
 
+    public int[][] getBoard() {
+        // Clone board array
+        int[][] result = new int[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            result[i] = board[i].clone();
+        }
+
+        // Place piece on board
+        for (int x = 0; x < piece.getSize(); x++) {
+            for (int y = 0; y < piece.getSize(); y++) {
+                int value = piece.getValueAt(x, y);
+                if (value == -1) {
+                    continue;
+                }
+                result[x + xStart][y + yStart] = value;
+            }
+        }
+
+        return result;
+    }
+
+    public int[][] getHoldPiece() {
+        if (hold == -1) {
+            return PieceFactory.createEmptyPiece().shape;
+        }
+        return PieceFactory.createPiece(hold).shape;
+    }
+
+    public int[][] getNextPiece() {
+        return PieceFactory.createPiece(next).shape;
+    }
+
     public boolean hold() {
         if (usedHold) {
             return false;
@@ -59,27 +91,6 @@ public class TetrisPlan {
 
     public Piece getPiece() {
         return piece;
-    }
-
-    public int[][] getBoard() {
-        // Clone board array
-        int[][] result = new int[board.length][];
-        for (int i = 0; i < board.length; i++) {
-            result[i] = board[i].clone();
-        }
-
-        // Place piece on board
-        for (int x = 0; x < piece.getSize(); x++) {
-            for (int y = 0; y < piece.getSize(); y++) {
-                int value = piece.getValueAt(x, y);
-                if (value == -1) {
-                    continue;
-                }
-                result[x + xStart][y + yStart] = value;
-            }
-        }
-
-        return result;
     }
 
     public void newPiece() {
