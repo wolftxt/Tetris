@@ -25,6 +25,9 @@ public class TetrisWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tetrisWidget1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tetrisWidget1KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tetrisWidget1KeyReleased(evt);
             }
@@ -34,15 +37,11 @@ public class TetrisWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tetrisWidget1, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tetrisWidget1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(tetrisWidget1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
         );
 
         pack();
@@ -74,6 +73,15 @@ public class TetrisWindow extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tetrisWidget1KeyReleased
+
+    private void tetrisWidget1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyPressed
+        TetrisGame game = tetrisWidget1.getGame();
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_DOWN -> {
+                game.softDrop();
+            }
+        }
+    }//GEN-LAST:event_tetrisWidget1KeyPressed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new TetrisWindow().setVisible(true));

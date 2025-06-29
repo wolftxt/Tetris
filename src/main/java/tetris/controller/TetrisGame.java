@@ -8,10 +8,15 @@ public class TetrisGame {
     private TetrisPlan plan;
     private TetrisWidget callback;
 
+    private Thread thread;
+    private boolean softDrop;
+
     public TetrisGame(TetrisWidget callback, int timeToFall) {
+        plan = new TetrisPlan();
         this.callback = callback;
 
-        plan = new TetrisPlan();
+        softDrop = false;
+
         plan.newNextPiece();
         plan.newPiece();
         plan.newNextPiece();
@@ -32,6 +37,11 @@ public class TetrisGame {
         plan.newPiece();
         plan.newNextPiece();
         this.callback.repaint();
+    }
+
+    public void softDrop() {
+        plan.move(0, 1);
+        callback.repaint();
     }
 
     public void rotate(int rotateTimes) {
@@ -59,19 +69,20 @@ public class TetrisGame {
     }
 
     private void gameLoop(int timeToFall) {
-        Thread.ofVirtual().start(() -> {
-            try {
-                while (plan.isPlaying()) {
-                    Thread.sleep(timeToFall);
+        this.thread = Thread.ofVirtual().start(() -> {
+            while (plan.isPlaying()) {
+                try {
+                    int time = softDrop ? timeToFall / 10 : timeToFall;
+                    Thread.sleep(time);
+
                     if (!plan.move(0, 1)) {
                         plan.placePiece();
                         plan.newPiece();
                         plan.newNextPiece();
                     }
                     this.callback.repaint();
+                } catch (InterruptedException ex) {
                 }
-            } catch (InterruptedException ex) {
-                System.err.println("Game loop thread got unexpectedly interrupted");
             }
         });
     }
