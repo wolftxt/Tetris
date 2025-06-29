@@ -11,4 +11,5 @@ public class UISettings {
         return instance;
     }
     public boolean randomColors = false;
+    public int shadowPieceAlphaValue = 100;
 }

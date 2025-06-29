@@ -27,7 +27,7 @@ public class TetrisPlan {
     private boolean playing;
 
     public TetrisPlan() {
-        board = new int[10][20];
+        board = new int[WIDTH][HEIGHT];
         for (int x = 0; x < board.length; x++) {
             Arrays.fill(board[x], -1);
         }
@@ -36,13 +36,16 @@ public class TetrisPlan {
     }
 
     public int[][] getBoard() {
-        // Clone board array
-        int[][] result = new int[board.length][];
-        for (int i = 0; i < board.length; i++) {
-            result[i] = board[i].clone();
-        }
+        return board;
+    }
 
-        // Place piece on board
+    public int[][] getCurrentPiece() {
+        // Make empty board
+        int[][] result = new int[WIDTH][HEIGHT];
+        for (int i = 0; i < result.length; i++) {
+            Arrays.fill(result[i], -1);
+        }
+        // Put piece on board
         for (int x = 0; x < piece.getSize(); x++) {
             for (int y = 0; y < piece.getSize(); y++) {
                 int value = piece.getValueAt(x, y);
@@ -52,7 +55,30 @@ public class TetrisPlan {
                 result[x + xStart][y + yStart] = value;
             }
         }
+        return result;
+    }
 
+    public int[][] getPieceShadow() {
+        // Make empty board
+        int[][] result = new int[WIDTH][HEIGHT];
+        for (int i = 0; i < result.length; i++) {
+            Arrays.fill(result[i], -1);
+        }
+        // Find lowest placement
+        int temp = yStart;
+        while (move(0, 1)) {
+        }
+        // Put piece on board
+        for (int x = 0; x < piece.getSize(); x++) {
+            for (int y = 0; y < piece.getSize(); y++) {
+                int value = piece.getValueAt(x, y);
+                if (value == -1) {
+                    continue;
+                }
+                result[x + xStart][y + yStart] = value;
+            }
+        }
+        yStart = temp;
         return result;
     }
 

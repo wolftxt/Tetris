@@ -10,7 +10,6 @@ import tetris.settings.UISettings;
 
 public class TetrisWidget extends JComponent {
 
-    private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
     private static final Color GRID_COLOR = Color.BLACK;
 
     private TetrisGame game;
@@ -57,6 +56,8 @@ public class TetrisWidget extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        UISettings settings = UISettings.getInstance();
+
         int[][] board = game.getPlan().getBoard();
 
         int s = getScaling(board.length, board[0].length);
@@ -75,18 +76,30 @@ public class TetrisWidget extends JComponent {
             }
         }
 
+        // Draw current piece
+        int[][] piece = game.getPlan().getCurrentPiece();
+        int xStart = xOffset;
+        drawPiece(piece, xStart, g, s, null);
+
+        // Draw piece shadow
+        piece = game.getPlan().getPieceShadow();
+        int index = game.getPlan().getPiece().getIndex();
+        Color c = pieceColors[index];
+        Color opaque = new Color(c.getRed(), c.getGreen(), c.getBlue(), settings.shadowPieceAlphaValue);
+        drawPiece(piece, xStart, g, s, opaque);
+
         // Draw hold piece
-        int[][] piece = game.getPlan().getHoldPiece();
-        int xStart = xOffset - (piece.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
-        drawPiece(piece, xStart, g, s);
+        piece = game.getPlan().getHoldPiece();
+        xStart = xOffset - (piece.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
+        drawPiece(piece, xStart, g, s, null);
 
         // Draw next piece
         piece = game.getPlan().getNextPiece();
         xStart = xOffset + (board.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
-        drawPiece(piece, xStart, g, s);
+        drawPiece(piece, xStart, g, s, null);
     }
 
-    private void drawPiece(int[][] piece, int xStart, Graphics g, int s) {
+    private void drawPiece(int[][] piece, int xStart, Graphics g, int s, Color pieceColor) {
         for (int x = 0; x < piece.length; x++) {
             for (int y = 0; y < piece[0].length; y++) {
                 g.setColor(GRID_COLOR);
@@ -94,7 +107,10 @@ public class TetrisWidget extends JComponent {
                 if (piece[x][y] == -1) {
                     continue;
                 }
-                g.setColor(pieceColors[piece[x][y]]);
+                if (pieceColor == null) {
+                    pieceColor = pieceColors[piece[x][y]];
+                }
+                g.setColor(pieceColor);
                 g.fillRect(xStart + x * s, y * s, s, s);
             }
         }
