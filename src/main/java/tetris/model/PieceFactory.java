@@ -41,32 +41,32 @@ public class PieceFactory {
     }
 
     public static Piece createLPiece() {
-        int[][] shape = {{1, -1, -1}, {1, 1, 1}, {-1, -1, -1}};
+        int[][] shape = {{-1, 1, -1}, {-1, 1, -1}, {1, 1, -1}};
         return new Piece(shape, 1);
     }
 
     public static Piece createJPiece() {
-        int[][] shape = {{-1, -1, 2}, {2, 2, 2}, {-1, -1, -1}};
+        int[][] shape = {{2, 2, -1}, {-1, 2, -1}, {-1, 2, -1}};
         return new Piece(shape, 2);
     }
 
     public static Piece createTPiece() {
-        int[][] shape = {{-1, 3, -1}, {3, 3, 3}, {-1, -1, -1}};
+        int[][] shape = {{-1,3,-1},{3,3,-1},{-1,3,-1}};
         return new Piece(shape, 3);
     }
 
     public static Piece createSPiece() {
-        int[][] shape = {{-1, 4, 4}, {4, 4, -1}, {-1, -1, -1}};
+        int[][] shape = {{4,-1,-1},{4,4,-1},{-1,4,-1}};
         return new Piece(shape, 4);
     }
 
     public static Piece createZPiece() {
-        int[][] shape = {{5, 5, -1}, {-1, 5, 5}, {-1, -1, -1}};
+        int[][] shape = {{-1,5,-1},{5,5,-1},{5,-1,-1}};
         return new Piece(shape, 5);
     }
 
     public static Piece createLinePiece() {
-        int[][] shape = {{-1, -1, -1, -1}, {6, 6, 6, 6}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
+        int[][] shape = {{-1,6,-1,-1},{-1,6,-1,-1},{-1,6,-1,-1},{-1,6,-1,-1}};
         return new Piece(shape, 6);
     }
 }

@@ -2,5 +2,4 @@ Welcome to Tetris. In the left square you can see the hold piece and in the righ
 Default keybinds are:
 h - show this message
 n - start new game
-s - configure UI settings
 o - configure keybinds
