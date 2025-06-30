@@ -158,7 +158,7 @@ public class TetrisPlan {
                 board[x + xStart][y + yStart] = value;
             }
         }
-        this.piece = null; // Ensures NullPointerException will be trown if code tries to use the non-existant piece
+        this.piece = null; // Ensures NullPointerException will be thrown if code tries to use the non-existent piece
 
         // clear lines
         int[][] newBoard = new int[WIDTH][HEIGHT];

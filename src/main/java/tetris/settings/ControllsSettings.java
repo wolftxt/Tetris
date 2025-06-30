@@ -13,6 +13,10 @@ public class ControllsSettings {
         return instance;
     }
 
+    public static void resetToDefaults() {
+        instance = new ControllsSettings();
+    }
+
     public int hardDropKey = KeyEvent.VK_SPACE;
     public int holdKey = KeyEvent.VK_C;
     public int clockwiseKey = KeyEvent.VK_UP;
@@ -22,4 +26,8 @@ public class ControllsSettings {
     public int softDropKey = KeyEvent.VK_DOWN;
     public int leftKey = KeyEvent.VK_LEFT;
     public int rightKey = KeyEvent.VK_RIGHT;
+
+    public int helpKey = KeyEvent.VK_H;
+    public int newGameKey = KeyEvent.VK_N;
+    public int controllsKey = KeyEvent.VK_O;
 }

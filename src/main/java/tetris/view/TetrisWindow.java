@@ -6,7 +6,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JFrame;
 import tetris.controller.TetrisGame;
 import tetris.settings.ControllsSettings;
 
@@ -37,8 +36,12 @@ public class TetrisWindow extends javax.swing.JFrame {
         releasedKeys.put(cs.clockwiseKeyAlternative, () -> game.rotate(3));
         releasedKeys.put(cs.rotate180Key, () -> game.rotate(2));
 
-        releasedKeys.put(KeyEvent.VK_H, () -> Popups.help());
-        releasedKeys.put(KeyEvent.VK_N, () -> tetrisWidget1.newGame(Popups.getGameSpeed()));
+        releasedKeys.put(cs.helpKey, () -> Popups.help());
+        releasedKeys.put(cs.newGameKey, () -> {
+            tetrisWidget1.newGame(Popups.getGameSpeed());
+            initMaps();
+        });
+        releasedKeys.put(cs.controllsKey, () -> Popups.configureControllsSettings());
 
         // Pressed keys map
         pressedKeys = new HashMap();
@@ -92,7 +95,7 @@ public class TetrisWindow extends javax.swing.JFrame {
     public static void main(String args[]) {
         FlatDarkLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
-            JFrame window = new TetrisWindow();
+            TetrisWindow window = new TetrisWindow();
             window.setVisible(true);
             Popups.parent = window;
             Popups.help();

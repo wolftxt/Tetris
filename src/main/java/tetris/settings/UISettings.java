@@ -1,5 +1,7 @@
 package tetris.settings;
 
+import java.awt.Font;
+
 public class UISettings {
 
     private static UISettings instance;
@@ -12,4 +14,5 @@ public class UISettings {
     }
     public boolean randomColors = false;
     public int shadowPieceAlphaValue = 100;
+    public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
 }
