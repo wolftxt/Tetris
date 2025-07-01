@@ -21,15 +21,13 @@ public class Popups {
 
     public static int getGameSpeed() {
         int result = 0;
-        String input;
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                input = JOptionPane.showInputDialog(parent, "Write the speed of the game in terms of time for a piece to fall.");
-                result = Integer.parseInt(input);
-                validInput = true;
-            } catch (NumberFormatException e) {
-            }
+        String title = "Input game speed";
+        String message = "Write the speed of the game in terms of time for a piece to fall.\nInvalid input will result in a game speed of 2000 (Piece falls every 2 seconds)";
+        String input = JOptionPane.showInputDialog(parent, message, title);
+        try {
+            result = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            result = 2000;
         }
         return result;
     }

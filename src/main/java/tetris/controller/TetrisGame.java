@@ -56,6 +56,7 @@ public class TetrisGame {
         for (int i = 0; i < rotateTimes; i++) {
             plan.getPiece().rotate();
         }
+        settlePieceInPlace();
         if (!plan.move(0, 0)) {
             for (int i = 0; i < 4 - rotateTimes; i++) {
                 plan.getPiece().rotate();
@@ -63,6 +64,14 @@ public class TetrisGame {
             return;
         }
         this.callback.repaint();
+    }
+
+    private void settlePieceInPlace() {
+        if (plan.move(0, 0)
+                || plan.move(0, 1)
+                || plan.move(1, 0) || plan.move(-1, 0)
+                || plan.move(2, 0) || plan.move(-2, 0)) {
+        }
     }
 
     public void moveDirection(int direction) {

@@ -13,8 +13,8 @@ import java.util.Random;
 public class TetrisPlan {
 
     public static final int PIECE_COUNT = 7;
-    public static final int WIDTH = 10;
-    public static final int HEIGHT = 20;
+    private static final int WIDTH = 10;
+    private static final int HEIGHT = 20;
 
     private int[][] board;
     private Piece piece;
@@ -129,6 +129,8 @@ public class TetrisPlan {
 
         xStart = WIDTH / 2 - piece.getSize() / 2;
         yStart = 0;
+        while (move(0, -1)) {
+        }
         if (!isLegal(0, 0)) {
             this.playing = false;
         }
