@@ -1,5 +1,12 @@
 package tetris.model;
 
+/**
+ * A class representing the current falling piece. The piece is represented as
+ * int[][] of square size where 2 <= n <= 4. The number in int represents the
+ * type of piece described in detail in PieceFactory.
+ *
+ * @author davidwolf
+ */
 public class Piece {
 
     public int[][] shape;
@@ -25,6 +32,11 @@ public class Piece {
         return shape[x][y];
     }
 
+    /**
+     * Rotates piece counterclockwise by swapping rows and transposing the
+     * matrix. Equivalent to this leetcode problem:
+     * https://leetcode.com/problems/rotate-image/description/
+     */
     public void rotate() {
         for (int x = 0; x < shape.length / 2; x++) {
             int ndIndex = shape.length - x - 1;

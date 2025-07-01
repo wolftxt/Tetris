@@ -9,6 +9,11 @@ import javax.swing.*;
 import tetris.settings.ControllsSettings;
 import tetris.settings.UISettings;
 
+/**
+ * Class with static methods used by TetrisWindow to show popups.
+ *
+ * @author davidwolf
+ */
 public class Popups {
 
     public static TetrisWindow parent;
@@ -19,10 +24,16 @@ public class Popups {
         JOptionPane.showMessageDialog(parent, sc.next());
     }
 
+    /**
+     * Shows a popup asking the user for a number representing the game speed.
+     * If user inputs invalid input, speed 2000 is used as default.
+     *
+     * @return
+     */
     public static int getGameSpeed() {
         int result = 0;
         String title = "Input game speed";
-        String message = "Write the speed of the game in terms of time for a piece to fall.\nInvalid input will result in a game speed of 2000 (Piece falls every 2 seconds)";
+        String message = "Write the speed of the game in terms of time (in milliseconds) for a piece to fall.\nInvalid input will result in a game speed of 2000 (Piece falls every 2 seconds)";
         String input = JOptionPane.showInputDialog(parent, message, title);
         try {
             result = Integer.parseInt(input);
@@ -32,6 +43,10 @@ public class Popups {
         return result;
     }
 
+    /**
+     * Shows a popup for modifying controlls settings. For each row uses the
+     * addRow() method.
+     */
     public static void configureControllsSettings() {
         ControllsSettings cs = ControllsSettings.getInstance();
         UISettings settings = UISettings.getInstance();
@@ -65,6 +80,17 @@ public class Popups {
         dialog.setVisible(true);
     }
 
+    /**
+     * Used for every row in configureControllsSettings() method. Allows the
+     * user to click a button and press a key to modify the controll setting.
+     * After a settings modification calls parent.initMaps() to update the
+     * settings. (Makes sure changes take effect immediately and don't require a
+     * restart)
+     *
+     * @param panel
+     * @param field
+     * @param object
+     */
     public static void addRow(JPanel panel, Field field, Object object) {
         UISettings settings = UISettings.getInstance();
         JPanel row = new JPanel(new BorderLayout(100, 10));

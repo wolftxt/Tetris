@@ -2,6 +2,11 @@ package tetris.settings;
 
 import java.awt.Font;
 
+/**
+ * Singleton class holding UI settings.
+ *
+ * @author davidwolf
+ */
 public class UISettings {
 
     private static UISettings instance;

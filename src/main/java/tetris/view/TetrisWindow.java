@@ -8,6 +8,12 @@ import java.util.Map;
 import tetris.controller.TetrisGame;
 import tetris.settings.ControllsSettings;
 
+/**
+ * Class handling the window of the program and actions like key presses. Uses
+ * FlatDarkLaf for looks and feels, hashmap to map keys to functions.
+ *
+ * @author davidwolf
+ */
 public class TetrisWindow extends javax.swing.JFrame {
 
     private Map<Integer, Runnable> releasedKeys;

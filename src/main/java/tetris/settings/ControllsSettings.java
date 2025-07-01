@@ -1,8 +1,14 @@
 package tetris.settings;
 
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
-public class ControllsSettings {
+/**
+ * Singleton class used to hold and save the controlls settings.
+ *
+ * @author davidwolf
+ */
+public class ControllsSettings implements Serializable {
 
     private static ControllsSettings instance;
 

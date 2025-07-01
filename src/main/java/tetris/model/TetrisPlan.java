@@ -5,8 +5,8 @@ import java.util.Random;
 
 /**
  * A class used to store the game state of the tetris game. State is stored in
- * the int[][] board array where: -1 means empty, everything else means occupied
- * (more numbers for different colors)
+ * the int[][] board array where: -1 means empty, 0-6 means a piece. Described
+ * further in PieceFactory.
  *
  * @author davidwolf
  */
@@ -150,6 +150,9 @@ public class TetrisPlan {
         return true;
     }
 
+    /**
+     * Method used to handle placing pieces and clearing lines
+     */
     public void placePiece() {
         for (int x = 0; x < piece.getSize(); x++) {
             for (int y = 0; y < piece.getSize(); y++) {
@@ -187,6 +190,16 @@ public class TetrisPlan {
         return playing;
     }
 
+    /**
+     * Method that determines if the piece would overlap with placed pieces or
+     * stick out of the board. In those cases it returns false.
+     *
+     * @param xOffset Offset on the x axis from the position determined by
+     * xStart
+     * @param yOffset Offset on the y axis from the position determined by
+     * yStart
+     * @return
+     */
     public boolean isLegal(int xOffset, int yOffset) {
         int xStart = this.xStart + xOffset;
         int yStart = this.yStart + yOffset;

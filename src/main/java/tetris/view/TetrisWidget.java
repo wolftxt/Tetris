@@ -8,6 +8,12 @@ import tetris.controller.TetrisGame;
 import tetris.model.TetrisPlan;
 import tetris.settings.UISettings;
 
+/**
+ * A JComponent covering the entire window and showing the board, hold piece and
+ * next piece. Allows for both random and default colors.
+ *
+ * @author davidwolf
+ */
 public class TetrisWidget extends JComponent {
 
     private static final Color GRID_COLOR = Color.BLACK;
