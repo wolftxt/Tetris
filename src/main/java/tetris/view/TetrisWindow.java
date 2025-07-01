@@ -35,12 +35,6 @@ public class TetrisWindow extends javax.swing.JFrame {
 
         // Released keys map
         releasedKeys = new HashMap();
-        releasedKeys.put(cs.hardDropKey, () -> game.hardDrop());
-        releasedKeys.put(cs.holdKey, () -> game.hold());
-        releasedKeys.put(cs.clockwiseKey, () -> game.rotate(3));
-        releasedKeys.put(cs.clockwiseKeyAlternative, () -> game.rotate(3));
-        releasedKeys.put(cs.rotate180Key, () -> game.rotate(2));
-
         releasedKeys.put(cs.helpKey, () -> Popups.help());
         releasedKeys.put(cs.newGameKey, () -> {
             tetrisWidget1.newGame(Popups.getGameSpeed());
@@ -53,7 +47,13 @@ public class TetrisWindow extends javax.swing.JFrame {
         pressedKeys.put(cs.softDropKey, () -> game.softDrop());
         pressedKeys.put(cs.leftKey, () -> game.moveDirection(-1));
         pressedKeys.put(cs.rightKey, () -> game.moveDirection(1));
-        pressedKeys.put(cs.softDropKey, () -> game.softDrop());
+
+        pressedKeys.put(cs.hardDropKey, () -> game.hardDrop());
+        pressedKeys.put(cs.holdKey, () -> game.hold());
+        pressedKeys.put(cs.clockwiseKey, () -> game.rotate(3));
+        pressedKeys.put(cs.clockwiseKeyAlternative, () -> game.rotate(3));
+        pressedKeys.put(cs.rotate180Key, () -> game.rotate(2));
+        pressedKeys.put(cs.counterClockwiseKey, () -> game.rotate(1));
     }
 
     @SuppressWarnings("unchecked")
