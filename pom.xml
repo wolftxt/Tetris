@@ -28,6 +28,50 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>24</maven.compiler.release>
-        <exec.mainClass>tetris.Tetris</exec.mainClass>
+        <exec.mainClass>tetris.view.TetrisWindow</exec.mainClass>
     </properties>
+    <build>
+        <plugins>
+            <!-- Disable default JAR -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Build the JAR with the correct main class -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>${project.artifactId}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <archive>
+                        <manifest>
+                            <mainClass>${exec.mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> 
+                        <phase>package</phase> 
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
