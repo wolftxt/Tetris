@@ -1,2 +1,3 @@
 # Tetris
-A tetris implementation in java with multiplayer capabilities with sockets. (not yet implemented)
+A tetris implementation in java that allows the user to modify their controlls settings.
+![App Screenshot](screenshot.png)
