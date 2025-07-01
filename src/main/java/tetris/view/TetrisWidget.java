@@ -16,6 +16,7 @@ import tetris.settings.UISettings;
  */
 public class TetrisWidget extends JComponent {
 
+    private static final Color BG = new Color(60, 60, 60);
     private static final Color GRID_COLOR = Color.BLACK;
 
     private TetrisGame game;
@@ -68,6 +69,10 @@ public class TetrisWidget extends JComponent {
 
         int s = getScaling(board.length, board[0].length);
         int xOffset = getXOffset(board.length, board[0].length);
+
+        // Draw background
+        g.setColor(BG);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         // Draw board
         for (int x = 0; x < board.length; x++) {
