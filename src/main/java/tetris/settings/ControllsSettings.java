@@ -34,6 +34,11 @@ public class ControllsSettings implements Serializable {
 
     public static void resetToDefaults() {
         instance = new ControllsSettings();
+        File folder = FileNavigation.getJarFolder();
+        File file = new File(folder, FileNavigation.CONTROLLS_FILE_NAME);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public static void save() throws IOException {
