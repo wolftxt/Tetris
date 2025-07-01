@@ -3,6 +3,7 @@ package tetris.view;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Scanner;
 import javax.swing.*;
@@ -120,11 +121,12 @@ public class Popups {
                 public void keyPressed(KeyEvent evt) {
                     try {
                         field.setInt(ControllsSettings.getInstance(), evt.getKeyCode());
+                        ControllsSettings.save();
                         parent.initMaps();
 
                         currValue.setText(KeyEvent.getKeyText(evt.getKeyCode()));
                         currValue.setForeground(Color.WHITE);
-                    } catch (IllegalAccessException ex) {
+                    } catch (IllegalAccessException | IOException ex) {
                         ex.printStackTrace();
                     } finally {
                         dialog.removeKeyListener(this);
