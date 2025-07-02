@@ -94,7 +94,7 @@ public class TetrisPlan {
     }
 
     public boolean hold() {
-        if (usedHold) {
+        if (!playing || usedHold) {
             return false;
         }
         if (hold == -1) {
