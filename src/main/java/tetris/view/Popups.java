@@ -33,9 +33,10 @@ public class Popups {
      */
     public static void gameSpeed() {
         int result = 0;
-        String title = "Input game speed";
+        String title = "You died / New game";
         String message = "Write the speed of the game in terms of time (in milliseconds) for a piece to fall.\nInvalid input will result in a game speed of 2000 (Piece falls every 2 seconds)";
-        String input = JOptionPane.showInputDialog(parent, message, title);
+        String initialInputText = "2000";
+        String input = (String) JOptionPane.showInputDialog(parent, message, title, JOptionPane.QUESTION_MESSAGE, null, null, initialInputText);
         try {
             result = Integer.parseInt(input);
         } catch (NumberFormatException e) {
