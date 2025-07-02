@@ -1,6 +1,7 @@
 package tetris.controller;
 
 import tetris.model.TetrisPlan;
+import tetris.view.Popups;
 import tetris.view.TetrisWidget;
 
 /**
@@ -102,6 +103,7 @@ public class TetrisGame {
                 } catch (InterruptedException ex) {
                 }
             }
+            Popups.gameSpeed();
         });
     }
 }

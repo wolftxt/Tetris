@@ -29,6 +29,10 @@ public class TetrisWindow extends javax.swing.JFrame {
         initMaps();
     }
 
+    public TetrisWidget getWidget() {
+        return tetrisWidget1;
+    }
+
     public void initMaps() {
         ControllsSettings cs = ControllsSettings.getInstance();
         TetrisGame game = tetrisWidget1.getGame();
@@ -36,10 +40,7 @@ public class TetrisWindow extends javax.swing.JFrame {
         // Released keys map
         releasedKeys = new HashMap();
         releasedKeys.put(cs.helpKey, () -> Popups.help());
-        releasedKeys.put(cs.newGameKey, () -> {
-            tetrisWidget1.newGame(Popups.getGameSpeed());
-            initMaps();
-        });
+        releasedKeys.put(cs.newGameKey, () -> Popups.gameSpeed());
         releasedKeys.put(cs.controllsKey, () -> Popups.configureControllsSettings());
 
         // Pressed keys map
