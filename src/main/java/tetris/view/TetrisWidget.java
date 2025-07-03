@@ -1,6 +1,7 @@
 package tetris.view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JComponent;
@@ -18,6 +19,7 @@ public class TetrisWidget extends JComponent {
 
     private static final Color BG = new Color(60, 60, 60);
     private static final Color GRID_COLOR = Color.BLACK;
+    private static final Color FONT_COLOR = Color.WHITE;
 
     private TetrisGame game;
     private Color[] pieceColors = {Color.YELLOW, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.RED, Color.GREEN, Color.CYAN};
@@ -103,6 +105,14 @@ public class TetrisWidget extends JComponent {
         piece = game.getPlan().getHoldPiece();
         xStart = xOffset - (piece.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
         drawPiece(piece, xStart, g, s, null);
+
+        // Draw line count
+        String lineCount = "Lines cleared: " + game.getPlan().getLineClearCount();
+        int size = this.getHeight() / 20;
+        int yStart = this.getHeight() - size;
+        g.setFont(new Font("LineCountFont", Font.PLAIN, size));
+        g.setColor(FONT_COLOR);
+        g.drawString(lineCount, 0, yStart);
 
         // Draw next piece
         piece = game.getPlan().getNextPiece();

@@ -17,6 +17,7 @@ public class TetrisPlan {
     private static final int HEIGHT = 20;
 
     private int[][] board;
+    private int lineClearCount;
     private Piece piece;
     private int xStart;
     private int yStart;
@@ -31,8 +32,13 @@ public class TetrisPlan {
         for (int x = 0; x < board.length; x++) {
             Arrays.fill(board[x], -1);
         }
+        lineClearCount = 0;
         hold = -1;
         playing = true;
+    }
+
+    public int getLineClearCount() {
+        return lineClearCount;
     }
 
     public int[][] getBoard() {
@@ -181,6 +187,8 @@ public class TetrisPlan {
                     newBoard[x][lineIndex] = board[x][y];
                 }
                 lineIndex--;
+            } else {
+                lineClearCount++;
             }
         }
         board = newBoard;
