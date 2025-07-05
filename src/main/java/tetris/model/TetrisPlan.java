@@ -64,6 +64,10 @@ public class TetrisPlan {
         return result;
     }
 
+    /**
+     * Used by TetrisWidget to show where a piece would fall
+     * @return 
+     */
     public int[][] getPieceShadow() {
         // Make empty board
         int[][] result = new int[WIDTH][HEIGHT];
