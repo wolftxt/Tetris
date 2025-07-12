@@ -137,7 +137,7 @@ public class TetrisPlan {
         piece = PieceFactory.createPiece(next);
         next = -1; // Impossible value to make sure the same piece isn't used twice in a row
 
-        xStart = WIDTH / 2 - piece.getSize() / 2;
+        xStart = WIDTH / 2 - (piece.getSize() + 1) / 2;
         yStart = 0;
         while (move(0, -1)) {
         }
