@@ -1,5 +1,7 @@
 package tetris.controller;
 
+import java.lang.Thread.State;
+import java.util.concurrent.locks.LockSupport;
 import tetris.model.TetrisPlan;
 import tetris.view.Popups;
 import tetris.view.TetrisWidget;
@@ -14,6 +16,9 @@ public class TetrisGame {
 
     private TetrisPlan plan;
     private TetrisWidget callback;
+    private Thread gameLoopThread;
+    private Thread softDropThread;
+    private Thread leftRightThread;
 
     public TetrisGame(TetrisWidget callback, int timeToFall) {
         plan = new TetrisPlan();
@@ -22,7 +27,7 @@ public class TetrisGame {
         plan.newNextPiece();
         plan.newPiece();
         plan.newNextPiece();
-        gameLoop(timeToFall);
+        initiateThreads(timeToFall);
     }
 
     public TetrisPlan getPlan() {
@@ -38,12 +43,23 @@ public class TetrisGame {
         plan.placePiece();
         plan.newPiece();
         plan.newNextPiece();
-        this.callback.repaint();
+        callback.repaint();
     }
 
-    public void softDrop() {
-        plan.move(0, 1);
-        callback.repaint();
+    public void softDropStart() {
+        if (softDropThread.getState() == State.WAITING) {
+            gameLoopThread.interrupt();
+            System.out.println("unparked soft from start");
+            LockSupport.unpark(softDropThread);
+        }
+    }
+
+    public void softDropEnd() {
+        if (softDropThread.getState() != State.WAITING) {
+            softDropThread.interrupt();
+            System.out.println("unparked game from end");
+            LockSupport.unpark(gameLoopThread);
+        }
     }
 
     public void hold() {
@@ -89,21 +105,46 @@ public class TetrisGame {
         callback.repaint();
     }
 
-    private void gameLoop(int timeToFall) {
-        Thread.ofVirtual().start(() -> {
+    private void initiateThreads(int timeToFall) {
+        gameLoopThread = Thread.ofVirtual().start(() -> {
             while (plan.isPlaying()) {
                 try {
                     Thread.sleep(timeToFall);
+                    System.out.println("game running");
                     if (!plan.move(0, 1)) {
                         plan.placePiece();
                         plan.newPiece();
                         plan.newNextPiece();
                     }
-                    this.callback.repaint();
+                    callback.repaint();
                 } catch (InterruptedException ex) {
+                    System.out.println("parked game");
+                    LockSupport.park();
+                    System.out.println("unparked game");
                 }
             }
             Popups.gameSpeed();
+        });
+
+        softDropThread = Thread.ofVirtual().start(() -> {
+            LockSupport.park();
+            while (plan.isPlaying()) {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println("soft running");
+                    if (!plan.move(0, 1)) {
+                        System.out.println("piece fell and unparked game");
+                        LockSupport.unpark(gameLoopThread);
+                        LockSupport.park();
+                        System.out.println("unparked soft");
+                    }
+                    callback.repaint();
+                } catch (InterruptedException ex) {
+                    System.out.println("parked soft");
+                    LockSupport.park();
+                    System.out.println("unparked soft");
+                }
+            }
         });
     }
 }

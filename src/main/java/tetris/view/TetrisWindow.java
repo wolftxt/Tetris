@@ -42,10 +42,12 @@ public class TetrisWindow extends javax.swing.JFrame {
         releasedKeys.put(cs.helpKey, () -> Popups.help());
         releasedKeys.put(cs.newGameKey, () -> Popups.gameSpeed());
         releasedKeys.put(cs.controllsKey, () -> Popups.configureControllsSettings());
+        
+        releasedKeys.put(cs.softDropKey, () -> game.softDropEnd());
 
         // Pressed keys map
         pressedKeys = new HashMap();
-        pressedKeys.put(cs.softDropKey, () -> game.softDrop());
+        pressedKeys.put(cs.softDropKey, () -> game.softDropStart());
         pressedKeys.put(cs.leftKey, () -> game.moveDirection(-1));
         pressedKeys.put(cs.rightKey, () -> game.moveDirection(1));
 

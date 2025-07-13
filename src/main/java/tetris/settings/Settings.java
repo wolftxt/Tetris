@@ -7,16 +7,16 @@ import java.awt.Font;
  *
  * @author davidwolf
  */
-public class UISettings {
+public class Settings {
 
-    private static UISettings instance;
+    private static Settings instance;
 
-    private UISettings() {
+    private Settings() {
     }
 
-    public static UISettings getInstance() {
+    public static Settings getInstance() {
         if (instance == null) {
-            instance = new UISettings();
+            instance = new Settings();
         }
         return instance;
     }

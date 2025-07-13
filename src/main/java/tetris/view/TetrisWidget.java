@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.swing.JComponent;
 import tetris.controller.TetrisGame;
 import tetris.model.TetrisPlan;
-import tetris.settings.UISettings;
+import tetris.settings.Settings;
 
 /**
  * A JComponent covering the entire window and showing the board, hold piece and
@@ -34,7 +34,7 @@ public class TetrisWidget extends JComponent {
 
     public void newGame(int timeToFall) {
         this.game = new TetrisGame(this, timeToFall);
-        if (UISettings.getInstance().randomColors) {
+        if (Settings.getInstance().randomColors) {
             generateRandomColors();
         }
     }
@@ -65,7 +65,7 @@ public class TetrisWidget extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        UISettings settings = UISettings.getInstance();
+        Settings settings = Settings.getInstance();
 
         int[][] board = game.getPlan().getBoard();
 
