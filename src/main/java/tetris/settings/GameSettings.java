@@ -7,20 +7,22 @@ import java.awt.Font;
  *
  * @author davidwolf
  */
-public class Settings {
+public class GameSettings {
 
-    private static Settings instance;
+    private static GameSettings instance;
 
-    private Settings() {
+    private GameSettings() {
     }
 
-    public static Settings getInstance() {
+    public static GameSettings getInstance() {
         if (instance == null) {
-            instance = new Settings();
+            instance = new GameSettings();
         }
         return instance;
     }
     public boolean randomColors = false;
     public int shadowPieceAlphaValue = 100;
     public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
+    public int DAS = 175;
+    public int ARR = 15;
 }

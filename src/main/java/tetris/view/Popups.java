@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Scanner;
 import javax.swing.*;
 import tetris.settings.ControllsSettings;
-import tetris.settings.Settings;
+import tetris.settings.GameSettings;
 
 /**
  * Class with static methods used by TetrisWindow to show popups.
@@ -52,7 +52,7 @@ public class Popups {
      */
     public static void configureControllsSettings() {
         ControllsSettings cs = ControllsSettings.getInstance();
-        Settings settings = Settings.getInstance();
+        GameSettings settings = GameSettings.getInstance();
 
         JDialog dialog = new JDialog();
         JPanel panel = new JPanel();
@@ -95,7 +95,7 @@ public class Popups {
      * @param object
      */
     public static void addRow(JPanel panel, Field field, Object object) {
-        Settings settings = Settings.getInstance();
+        GameSettings settings = GameSettings.getInstance();
         JPanel row = new JPanel(new BorderLayout(100, 10));
 
         JLabel label = new JLabel(field.getName() + ": ");

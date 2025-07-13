@@ -1,8 +1,8 @@
 package tetris.controller;
 
-import java.lang.Thread.State;
 import java.util.concurrent.locks.LockSupport;
 import tetris.model.TetrisPlan;
+import tetris.settings.GameSettings;
 import tetris.view.Popups;
 import tetris.view.TetrisWidget;
 
@@ -103,6 +103,9 @@ public class TetrisGame {
         if (!plan.isPlaying()) {
             return;
         }
+        if (leftRightThread != null) {
+            leftRightThread.interrupt();
+        }
         leftRight(direction);
     }
 
@@ -158,16 +161,17 @@ public class TetrisGame {
     }
 
     private void leftRight(int direction) {
+        GameSettings gs = GameSettings.getInstance();
         leftRightThread = Thread.ofVirtual().start(() -> {
             try {
                 if (!plan.move(direction, 0)) {
                     return;
                 }
                 callback.repaint();
-                Thread.sleep(175);
+                Thread.sleep(gs.DAS);
                 while (plan.move(direction, 0)) {
                     callback.repaint();
-                    Thread.sleep(15);
+                    Thread.sleep(gs.ARR);
                 }
             } catch (InterruptedException e) {
             }
