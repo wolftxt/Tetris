@@ -29,7 +29,7 @@ public class TetrisPlanTest {
         plan.placePiece();
         plan.newNextPiece();
         plan.newPiece();
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 17; i++) {
             plan.move(0, 1);
         }
         Assert.assertEquals(plan.move(0, 1), false);
