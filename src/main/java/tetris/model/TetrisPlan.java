@@ -2,6 +2,7 @@ package tetris.model;
 
 import java.util.Arrays;
 import java.util.Random;
+import lombok.Data;
 
 /**
  * A class used to store the game state of the tetris game. State is stored in
@@ -10,11 +11,12 @@ import java.util.Random;
  *
  * @author davidwolf
  */
+@Data
 public class TetrisPlan {
 
     public static final int PIECE_COUNT = 7;
-    private static final int WIDTH = 10;
-    private static final int HEIGHT = 20;
+    public static final int WIDTH = 10;
+    public static final int HEIGHT = 20;
 
     private int[][] board;
     private int lineClearCount;
@@ -35,68 +37,6 @@ public class TetrisPlan {
         lineClearCount = 0;
         hold = -1;
         playing = true;
-    }
-
-    public int getLineClearCount() {
-        return lineClearCount;
-    }
-
-    public int[][] getBoard() {
-        return board;
-    }
-
-    public int[][] getCurrentPiece() {
-        // Make empty board
-        int[][] result = new int[WIDTH][HEIGHT];
-        for (int i = 0; i < result.length; i++) {
-            Arrays.fill(result[i], -1);
-        }
-        // Put piece on board
-        for (int x = 0; x < piece.getSize(); x++) {
-            for (int y = 0; y < piece.getSize(); y++) {
-                int value = piece.getValueAt(x, y);
-                if (value == -1) {
-                    continue;
-                }
-                result[x + xStart][y + yStart] = value;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Used by TetrisWidget to show where a piece would fall
-     * @return 
-     */
-    public int[][] getPieceShadow() {
-        // Make empty board
-        int[][] result = new int[WIDTH][HEIGHT];
-        for (int i = 0; i < result.length; i++) {
-            Arrays.fill(result[i], -1);
-        }
-        // Find lowest placement
-        int temp = yStart;
-        while (move(0, 1)) {
-        }
-        // Put piece on board
-        for (int x = 0; x < piece.getSize(); x++) {
-            for (int y = 0; y < piece.getSize(); y++) {
-                int value = piece.getValueAt(x, y);
-                if (value == -1) {
-                    continue;
-                }
-                result[x + xStart][y + yStart] = value;
-            }
-        }
-        yStart = temp;
-        return result;
-    }
-
-    public int[][] getHoldPiece() {
-        if (hold == -1) {
-            return PieceFactory.createEmptyPiece().shape;
-        }
-        return PieceFactory.createPiece(hold).shape;
     }
 
     public int[][] getNextPiece() {
