@@ -4,6 +4,13 @@ import java.util.Arrays;
 
 public class PlanVisual {
 
+    public static int[][] getHoldPiece(TetrisPlan plan) {
+        if (plan.getHold() == -1) {
+            return PieceFactory.createEmptyPiece().shape;
+        }
+        return PieceFactory.createPiece(plan.getHold()).shape;
+    }
+
     public static int[][] getCurrentPiece(TetrisPlan plan) {
         // Make empty board
         int[][] result = new int[TetrisPlan.WIDTH][TetrisPlan.HEIGHT];
@@ -18,7 +25,7 @@ public class PlanVisual {
                 if (value == -1) {
                     continue;
                 }
-                result[x + plan.getxStart()][y + plan.getyStart()] = value;
+                result[x + plan.getXStart()][y + plan.getYStart()] = value;
             }
         }
         return result;
@@ -29,16 +36,19 @@ public class PlanVisual {
      *
      * @return
      */
-    public int[][] getPieceShadow(TetrisPlan plan) {
+    public static int[][] getPieceShadow(TetrisPlan plan) {
         // Make empty board
         int[][] result = new int[TetrisPlan.WIDTH][TetrisPlan.HEIGHT];
         for (int i = 0; i < result.length; i++) {
             Arrays.fill(result[i], -1);
         }
         // Find lowest placement
-        int temp = plan.getyStart();
-        while (plan.move(0, 1)) {
+        int yOffset = 0;
+        while (plan.isLegal(0, yOffset + 1)) {
+            yOffset++;
         }
+        int xStart = plan.getXStart();
+        int yStart = plan.getYStart() + yOffset;
         // Put piece on board
         Piece piece = plan.getPiece();
         for (int x = 0; x < piece.getSize(); x++) {
@@ -47,10 +57,9 @@ public class PlanVisual {
                 if (value == -1) {
                     continue;
                 }
-                result[x + plan.getxStart()][y + plan.getyStart()] = value;
+                result[x + xStart][y + yStart] = value;
             }
         }
-        plan.setyStart(temp);
         return result;
     }
 }
