@@ -5,9 +5,6 @@ import java.util.Arrays;
 public class PlanVisual {
 
     public static int[][] getHoldPiece(TetrisPlan plan) {
-        if (plan.getHold() == -1) {
-            return PieceFactory.createEmptyPiece().shape;
-        }
         return PieceFactory.createPiece(plan.getHold()).shape;
     }
 

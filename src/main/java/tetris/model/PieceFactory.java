@@ -11,6 +11,9 @@ public class PieceFactory {
 
     public static Piece createPiece(int index) {
         switch (index) {
+            case -1 -> {
+                return PieceFactory.createEmptyPiece();
+            }
             case 0 -> {
                 return PieceFactory.createSquarePiece();
             }
