@@ -24,14 +24,34 @@
             <version>3.6</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>tetris.view.TetrisWindow</exec.mainClass>
+        <lombok.version>1.18.38</lombok.version>
     </properties>
     <build>
         <plugins>
+            <!-- Configure lombok with maven -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <!-- Disable default JAR -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
