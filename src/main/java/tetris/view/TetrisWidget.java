@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JComponent;
 import tetris.controller.TetrisGame;
+import tetris.model.PlanVisual;
 import tetris.model.TetrisPlan;
 import tetris.settings.GameSettings;
 
@@ -90,19 +91,19 @@ public class TetrisWidget extends JComponent {
         }
 
         // Draw current piece
-        int[][] piece = game.getPlan().getCurrentPiece();
+        int[][] piece = PlanVisual.getCurrentPiece(game.getPlan());
         int xStart = xOffset;
         drawPiece(piece, xStart, g, s, null);
 
         // Draw piece shadow
-        piece = game.getPlan().getPieceShadow();
+        piece = PlanVisual.getPieceShadow(game.getPlan());
         int index = game.getPlan().getPiece().getIndex();
         Color c = pieceColors[index];
         Color opaque = new Color(c.getRed(), c.getGreen(), c.getBlue(), settings.shadowPieceAlphaValue);
         drawPiece(piece, xStart, g, s, opaque);
 
         // Draw hold piece
-        piece = game.getPlan().getHoldPiece();
+        piece = PlanVisual.getHoldPiece(game.getPlan());
         xStart = xOffset - (piece.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
         drawPiece(piece, xStart, g, s, null);
 
