@@ -1,6 +1,5 @@
 package tetris.controller;
 
-import java.util.concurrent.locks.LockSupport;
 import tetris.model.TetrisPlan;
 import tetris.settings.GameSettings;
 import tetris.view.Popups;
@@ -17,7 +16,6 @@ public class TetrisGame {
     private TetrisPlan plan;
     private TetrisWidget callback;
     private Thread gameLoopThread;
-    private Thread softDropThread;
     private Thread leftRightThread;
     private boolean softDrop;
 
@@ -52,15 +50,13 @@ public class TetrisGame {
         if (!softDrop) {
             softDrop = true;
             gameLoopThread.interrupt();
-            LockSupport.unpark(softDropThread);
         }
     }
 
     public void softDropEnd() {
         if (softDrop) {
             softDrop = false;
-            softDropThread.interrupt();
-            LockSupport.unpark(gameLoopThread);
+            gameLoopThread.interrupt();
         }
     }
 
@@ -116,47 +112,39 @@ public class TetrisGame {
         leftRightThread.interrupt();
     }
 
+    private void gameLoop(int timeToFall) throws InterruptedException {
+        while (plan.isPlaying()) {
+            Thread.sleep(timeToFall);
+            if (!plan.move(0, 1)) {
+                plan.placePiece();
+                plan.newPiece();
+                plan.newNextPiece();
+            }
+            callback.repaint();
+        }
+    }
+
+    private void softDrop() throws InterruptedException {
+        Thread.sleep(10);
+        while (!plan.move(0, 1)) {
+            callback.repaint();
+        }
+        softDrop = false;
+    }
+
     private void initiateThreads(int timeToFall) {
         gameLoopThread = Thread.ofVirtual().start(() -> {
             while (plan.isPlaying()) {
                 try {
-                    Thread.sleep(timeToFall);
-                    if (!plan.move(0, 1)) {
-                        plan.placePiece();
-                        plan.newPiece();
-                        plan.newNextPiece();
+                    if (softDrop) {
+                        softDrop();
+                    } else {
+                        gameLoop(timeToFall);
                     }
-                    callback.repaint();
-                } catch (InterruptedException ex) {
-                    LockSupport.park();
-                    while (softDrop) {
-                        LockSupport.park();
-                    }
+                } catch (InterruptedException e) {
                 }
             }
             Popups.gameSpeed();
-        });
-
-        softDropThread = Thread.ofVirtual().start(() -> {
-            LockSupport.park();
-            while (plan.isPlaying()) {
-                try {
-                    Thread.sleep(10);
-                    if (!plan.move(0, 1)) {
-                        LockSupport.unpark(gameLoopThread);
-                        LockSupport.park();
-                        while (!softDrop) {
-                            LockSupport.park();
-                        }
-                    }
-                    callback.repaint();
-                } catch (InterruptedException ex) {
-                    LockSupport.park();
-                    while (!softDrop) {
-                        LockSupport.park();
-                    }
-                }
-            }
         });
     }
 
