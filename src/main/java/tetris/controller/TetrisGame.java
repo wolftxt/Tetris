@@ -126,12 +126,13 @@ public class TetrisGame {
     }
 
     private void softDrop() throws InterruptedException {
+        GameSettings gs = GameSettings.getInstance();
         while (plan.move(0, 1)) {
             callback.repaint();
-            Thread.sleep(10);
+            Thread.sleep(gs.softDropSpeedInMs);
         }
         softDrop = false;
-        Thread.sleep(1000);
+        Thread.sleep(gs.hardDropSpeedAfterSoftDropInMs);
         hardDrop();
     }
 

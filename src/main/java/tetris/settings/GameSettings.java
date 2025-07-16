@@ -67,6 +67,8 @@ public class GameSettings implements Serializable {
 
     public int shadowPieceAlphaValue = 100;
     public int previewPieceCount = 5;
+    public int softDropSpeedInMs = 10;
+    public int hardDropSpeedAfterSoftDropInMs = 1000;
     public int DAS = 175;
     public int ARR = 15;
     public boolean randomColors = false;
