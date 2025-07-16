@@ -13,11 +13,12 @@ import tetris.view.TetrisWidget;
  */
 public class TetrisGame {
 
-    private TetrisPlan plan;
-    private TetrisWidget callback;
+    private final TetrisPlan plan;
+    private final TetrisWidget callback;
     private Thread gameLoopThread;
     private Thread leftRightThread;
     private boolean softDrop;
+    private int leftRight;
 
     public TetrisGame(TetrisWidget callback, int timeToFall) {
         softDrop = false;
@@ -93,21 +94,24 @@ public class TetrisGame {
         }
     }
 
-    public void leftRightStart(int direction) {
-        if (!plan.isPlaying()) {
+    public synchronized void leftRightStart(int direction) {
+        if (!plan.isPlaying() || leftRight == direction) {
             return;
         }
+        leftRight = direction;
         if (leftRightThread != null) {
             leftRightThread.interrupt();
         }
         leftRight(direction);
     }
 
-    public void leftRightEnd() {
+    public synchronized void leftRightEnd(int direction) {
         if (!plan.isPlaying()) {
             return;
         }
-        leftRightThread.interrupt();
+        if (direction == leftRight) {
+            leftRightThread.interrupt();
+        }
     }
 
     private void gameLoop(int timeToFall) throws InterruptedException {
@@ -162,6 +166,7 @@ public class TetrisGame {
                 }
             } catch (InterruptedException e) {
             }
+            leftRight = 0;
         });
     }
 }
