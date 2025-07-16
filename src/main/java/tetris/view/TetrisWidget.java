@@ -25,7 +25,7 @@ public class TetrisWidget extends JComponent {
     private static final Color FONT_COLOR = Color.WHITE;
 
     private TetrisGame game;
-    private Color[] pieceColors = {Color.YELLOW, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.RED, Color.GREEN, Color.CYAN};
+    private Color[] pieceColors;
 
     public TetrisWidget() {
         newGame(2000);
@@ -37,8 +37,11 @@ public class TetrisWidget extends JComponent {
 
     public void newGame(int timeToFall) {
         this.game = new TetrisGame(this, timeToFall);
-        if (GameSettings.getInstance().randomColors) {
+        GameSettings gs = GameSettings.getInstance();
+        if (gs.randomColors) {
             generateRandomColors();
+        } else {
+            pieceColors = new Color[]{gs.O, gs.L, gs.J, gs.T, gs.Z, gs.S, gs.I};
         }
     }
 

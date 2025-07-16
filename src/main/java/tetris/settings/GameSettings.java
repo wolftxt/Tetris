@@ -1,5 +1,6 @@
 package tetris.settings;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,5 +71,12 @@ public class GameSettings implements Serializable {
     public int ARR = 15;
     public boolean randomColors = false;
     public boolean randomPieces = false;
+    public Color O = Color.YELLOW;
+    public Color L = Color.ORANGE;
+    public Color J = Color.BLUE;
+    public Color T = Color.MAGENTA;
+    public Color Z = Color.RED;
+    public Color S = Color.GREEN;
+    public Color I = Color.CYAN;
     public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
 }
