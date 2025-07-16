@@ -143,6 +143,9 @@ public class Popups {
         currValue.setHorizontalAlignment(SwingConstants.CENTER);
         currValue.setFont(settings.pageFont);
         left.add(currValue);
+        if (object instanceof Color color) {
+            currValue.setForeground(color);
+        }
 
         JButton button = new JButton("Change");
         button.setFont(settings.pageFont);
@@ -178,7 +181,7 @@ public class Popups {
         }
     }
 
-    private static void setSetting(Field field, Object object, JLabel panel) {
+    private static void setSetting(Field field, Object object, JLabel label) {
         GameSettings gs = GameSettings.getInstance();
         try {
             switch (object) {
@@ -187,29 +190,30 @@ public class Popups {
                     if (c == null) {
                         return;
                     }
+                    label.setForeground(c);
                     field.set(gs, c);
-                    panel.setText(getStringValue(c));
+                    label.setText(getStringValue(c));
                 }
                 case Integer i -> {
-                    String input = JOptionPane.showInputDialog(panel, "Set a numeric value");
+                    String input = JOptionPane.showInputDialog(label, "Set a numeric value");
                     try {
                         i = Integer.parseInt(input);
                         field.set(gs, i);
                     } catch (NumberFormatException ex) {
                         System.err.println("Invalid number input");
                     }
-                    panel.setText(getStringValue(i));
+                    label.setText(getStringValue(i));
                 }
                 case Boolean b -> { // IMPORTANT - ignores which class the boolean comes from, tries to get it from GameSettings
                     b = !field.getBoolean(GameSettings.getInstance());
                     field.set(gs, b);
-                    panel.setText(getStringValue(b));
+                    label.setText(getStringValue(b));
                 }
                 case String s -> {
-                    panel.setForeground(Color.YELLOW);
-                    panel.setText("Press key");
+                    label.setForeground(Color.YELLOW);
+                    label.setText("Press key");
 
-                    JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(panel);
+                    JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(label);
                     dialog.requestFocusInWindow();
 
                     KeyAdapter keyAdapter = new KeyAdapter() {
@@ -220,8 +224,8 @@ public class Popups {
                                 ControllsSettings.save();
                                 parent.initMaps();
 
-                                panel.setText(KeyEvent.getKeyText(evt.getKeyCode()));
-                                panel.setForeground(Color.WHITE);
+                                label.setText(KeyEvent.getKeyText(evt.getKeyCode()));
+                                label.setForeground(Color.WHITE);
                             } catch (IllegalAccessException | IOException ex) {
                                 ex.printStackTrace();
                             } finally {
