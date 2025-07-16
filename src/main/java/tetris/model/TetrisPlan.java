@@ -1,10 +1,12 @@
 package tetris.model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import lombok.Data;
+import tetris.settings.GameSettings;
 
 /**
  * A class used to store the game state of the tetris game. State is stored in
@@ -85,9 +87,21 @@ public class TetrisPlan {
     }
 
     public void newNextPieces() {
-        for (int i = 0; i < PIECE_COUNT; i++) {
-            Random r = new Random();
-            next.add(r.nextInt(PIECE_COUNT));
+        GameSettings gs = GameSettings.getInstance();
+        if (gs.randomPieces) {
+            // Completely random pieces
+            for (int i = 0; i < PIECE_COUNT; i++) {
+                Random r = new Random();
+                next.add(r.nextInt(PIECE_COUNT));
+            }
+        } else {
+            // 7 bag piece system
+            List<Integer> add = new LinkedList();
+            for (int i = 0; i < PIECE_COUNT; i++) {
+                add.add(i);
+            }
+            Collections.shuffle(add);
+            next.addAll(add);
         }
     }
 

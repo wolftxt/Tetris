@@ -127,7 +127,7 @@ public class TetrisGame {
             Thread.sleep(10);
         }
         softDrop = false;
-        Thread.sleep(500);
+        Thread.sleep(1000);
         hardDrop();
     }
 

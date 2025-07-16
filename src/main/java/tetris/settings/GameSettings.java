@@ -24,6 +24,7 @@ public class GameSettings {
     public int shadowPieceAlphaValue = 100;
     public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
     public int previewPieceCount = 5;
+    public boolean randomPieces = false;
     public int DAS = 175;
     public int ARR = 15;
 }
