@@ -108,7 +108,7 @@ public class Popups {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         dialog.add(scrollPane, BorderLayout.CENTER);
-        
+
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
@@ -169,6 +169,9 @@ public class Popups {
             case Integer i -> {
                 return String.valueOf(i);
             }
+            case Boolean b -> {
+                return Boolean.toString(b);
+            }
             default -> {
                 return null;
             }
@@ -196,6 +199,11 @@ public class Popups {
                         System.err.println("Invalid number input");
                     }
                     panel.setText(getStringValue(i));
+                }
+                case Boolean b -> { // IMPORTANT - ignores which class the boolean comes from, tries to get it from GameSettings
+                    b = !field.getBoolean(GameSettings.getInstance());
+                    field.set(gs, b);
+                    panel.setText(getStringValue(b));
                 }
                 case String s -> {
                     panel.setForeground(Color.YELLOW);

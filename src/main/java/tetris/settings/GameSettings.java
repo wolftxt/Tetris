@@ -64,11 +64,11 @@ public class GameSettings implements Serializable {
         return result;
     }
 
-    public boolean randomColors = false;
     public int shadowPieceAlphaValue = 100;
     public int previewPieceCount = 5;
-    public boolean randomPieces = false;
     public int DAS = 175;
     public int ARR = 15;
+    public boolean randomColors = false;
+    public boolean randomPieces = false;
     public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
 }
