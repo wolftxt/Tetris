@@ -5,6 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Scanner;
 import javax.swing.*;
 import tetris.settings.ControllsSettings;
@@ -52,12 +53,13 @@ public class Popups {
      */
     public static void configureControllsSettings() {
         ControllsSettings cs = ControllsSettings.getInstance();
-        GameSettings settings = GameSettings.getInstance();
+        GameSettings gs = GameSettings.getInstance();
 
-        JDialog dialog = new JDialog();
+        JDialog dialog = new JDialog(parent, "Configure settings:", true);
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
         for (Field field : cs.getClass().getDeclaredFields()) {
             Object object;
             try {
@@ -65,19 +67,48 @@ public class Popups {
             } catch (IllegalArgumentException | IllegalAccessException ex) {
                 continue;
             }
-            addRow(panel, field, object);
+            String value = KeyEvent.getKeyText((int) object);
+            addRow(panel, field, value);
         }
-        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton reset = new JButton("Reset all settings to defaults");
-        reset.setFont(settings.pageFont);
-        reset.addActionListener(e -> {
+
+        JButton resetKeys = new JButton("Reset all keybind settings to defaults");
+        resetKeys.setFont(gs.pageFont);
+        resetKeys.addActionListener(e -> {
             ControllsSettings.resetToDefaults();
             parent.initMaps();
             dialog.dispose();
         });
-        wrapper.add(reset);
-        panel.add(wrapper);
-        dialog.add(panel);
+        JPanel wrapperKeys = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        wrapperKeys.add(resetKeys);
+        panel.add(wrapperKeys);
+
+        for (Field field : gs.getClass().getDeclaredFields()) {
+            Object object;
+            try {
+                object = field.get(gs);
+            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                continue;
+            }
+            addRow(panel, field, object);
+        }
+
+        JButton resetGameSettings = new JButton("Reset all game settings to defaults");
+        resetGameSettings.setFont(gs.pageFont);
+        resetGameSettings.addActionListener(e -> {
+            GameSettings.resetToDefaults();
+            parent.initMaps();
+            dialog.dispose();
+        });
+        JPanel wrapperGame = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        wrapperGame.add(resetGameSettings);
+        panel.add(wrapperGame);
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
@@ -94,7 +125,11 @@ public class Popups {
      * @param field
      * @param object
      */
-    public static void addRow(JPanel panel, Field field, Object object) {
+    private static void addRow(JPanel panel, Field field, Object object) {
+        String value = getStringValue(object);
+        if (value == null) {
+            return;
+        }
         GameSettings settings = GameSettings.getInstance();
         JPanel row = new JPanel(new BorderLayout(100, 10));
 
@@ -104,7 +139,7 @@ public class Popups {
 
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 
-        JLabel currValue = new JLabel(KeyEvent.getKeyText((int) object));
+        JLabel currValue = new JLabel(value);
         currValue.setHorizontalAlignment(SwingConstants.CENTER);
         currValue.setFont(settings.pageFont);
         left.add(currValue);
@@ -112,30 +147,7 @@ public class Popups {
         JButton button = new JButton("Change");
         button.setFont(settings.pageFont);
         button.addActionListener(e -> {
-            currValue.setForeground(Color.YELLOW);
-            currValue.setText("Press key");
-
-            JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(panel);
-            dialog.requestFocusInWindow();
-
-            KeyAdapter keyAdapter = new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent evt) {
-                    try {
-                        field.setInt(ControllsSettings.getInstance(), evt.getKeyCode());
-                        ControllsSettings.save();
-                        parent.initMaps();
-
-                        currValue.setText(KeyEvent.getKeyText(evt.getKeyCode()));
-                        currValue.setForeground(Color.WHITE);
-                    } catch (IllegalAccessException | IOException ex) {
-                        ex.printStackTrace();
-                    } finally {
-                        dialog.removeKeyListener(this);
-                    }
-                }
-            };
-            dialog.addKeyListener(keyAdapter);
+            setSetting(field, object, currValue);
         });
         left.add(button);
 
@@ -146,4 +158,78 @@ public class Popups {
         panel.add(Box.createVerticalStrut(10));
     }
 
+    private static String getStringValue(Object object) {
+        switch (object) {
+            case String s -> {
+                return s;
+            }
+            case Color c -> {
+                return Arrays.toString(c.getColorComponents(null));
+            }
+            case Integer i -> {
+                return String.valueOf(i);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private static void setSetting(Field field, Object object, JLabel panel) {
+        GameSettings gs = GameSettings.getInstance();
+        try {
+            switch (object) {
+                case Color c -> {
+                    c = JColorChooser.showDialog(parent, "Choose a new color", c, true);
+                    if (c == null) {
+                        return;
+                    }
+                    field.set(gs, c);
+                    panel.setText(getStringValue(c));
+                }
+                case Integer i -> {
+                    String input = JOptionPane.showInputDialog(panel, "Set a numeric value");
+                    try {
+                        i = Integer.parseInt(input);
+                        field.set(gs, i);
+                    } catch (NumberFormatException ex) {
+                        System.err.println("Invalid number input");
+                    }
+                    panel.setText(getStringValue(i));
+                }
+                case String s -> {
+                    panel.setForeground(Color.YELLOW);
+                    panel.setText("Press key");
+
+                    JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(panel);
+                    dialog.requestFocusInWindow();
+
+                    KeyAdapter keyAdapter = new KeyAdapter() {
+                        @Override
+                        public void keyPressed(KeyEvent evt) {
+                            try {
+                                field.setInt(ControllsSettings.getInstance(), evt.getKeyCode());
+                                ControllsSettings.save();
+                                parent.initMaps();
+
+                                panel.setText(KeyEvent.getKeyText(evt.getKeyCode()));
+                                panel.setForeground(Color.WHITE);
+                            } catch (IllegalAccessException | IOException ex) {
+                                ex.printStackTrace();
+                            } finally {
+                                dialog.removeKeyListener(this);
+                            }
+                        }
+                    };
+                    dialog.addKeyListener(keyAdapter);
+                }
+                default ->
+                    JOptionPane.showMessageDialog(parent, "Unsupported datatype", "Cannot modify the datatype of this setting", JOptionPane.ERROR_MESSAGE);
+            }
+            ControllsSettings.save();
+            GameSettings.save();
+        } catch (IllegalArgumentException | IllegalAccessException | IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

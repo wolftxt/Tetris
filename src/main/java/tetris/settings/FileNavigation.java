@@ -6,6 +6,7 @@ import java.net.URL;
 public class FileNavigation {
 
     public static final String CONTROLLS_FILE_NAME = "ControllsSettings";
+    public static final String SETTINGS_FILE_NAME = "Settings";
 
     /**
      * Returns the folder where the Tetris.jar file is located.
