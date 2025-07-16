@@ -1,6 +1,8 @@
 package tetris.model;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import lombok.Data;
 
@@ -24,13 +26,14 @@ public class TetrisPlan {
     private int xStart;
     private int yStart;
 
-    private int next;
+    private List<Integer> next;
     private int hold;
     private boolean usedHold;
     private boolean playing;
 
     public TetrisPlan() {
         board = new int[WIDTH][HEIGHT];
+        next = new LinkedList();
         for (int x = 0; x < board.length; x++) {
             Arrays.fill(board[x], -1);
         }
@@ -47,27 +50,30 @@ public class TetrisPlan {
             hold = piece.getIndex();
             piece = null;
             newPiece();
-            newNextPiece();
             usedHold = true;
             return true;
         }
-        int temp = next;
-        next = hold;
+        int temp = hold;
         hold = piece.getIndex();
         piece = null;
-        newPiece();
-        next = temp;
+        newPiece(temp);
         usedHold = true;
         return true;
     }
 
     public void newPiece() {
+        newPiece(next.removeFirst());
+        if (next.size() <= PIECE_COUNT) {
+            newNextPieces();
+        }
+    }
+
+    public void newPiece(int nextPiece) {
         usedHold = false;
         if (piece != null) {
             throw new RuntimeException("Tried to make a new piece but a piece already exists");
         }
-        piece = PieceFactory.createPiece(next);
-        next = -1; // Impossible value to make sure the same piece isn't used twice in a row
+        piece = PieceFactory.createPiece(nextPiece);
 
         xStart = WIDTH / 2 - (piece.getSize() + 1) / 2;
         yStart = 0;
@@ -78,9 +84,11 @@ public class TetrisPlan {
         }
     }
 
-    public void newNextPiece() {
-        Random r = new Random();
-        next = r.nextInt(PIECE_COUNT);
+    public void newNextPieces() {
+        for (int i = 0; i < PIECE_COUNT; i++) {
+            Random r = new Random();
+            next.add(r.nextInt(PIECE_COUNT));
+        }
     }
 
     public boolean move(int x, int y) {

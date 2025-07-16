@@ -24,9 +24,8 @@ public class TetrisGame {
         plan = new TetrisPlan();
         this.callback = callback;
 
-        plan.newNextPiece();
+        plan.newNextPieces();
         plan.newPiece();
-        plan.newNextPiece();
         initiateThreads(timeToFall);
     }
 
@@ -42,7 +41,6 @@ public class TetrisGame {
         }
         plan.placePiece();
         plan.newPiece();
-        plan.newNextPiece();
         callback.repaint();
     }
 
@@ -118,7 +116,6 @@ public class TetrisGame {
             if (!plan.move(0, 1)) {
                 plan.placePiece();
                 plan.newPiece();
-                plan.newNextPiece();
             }
             callback.repaint();
         }

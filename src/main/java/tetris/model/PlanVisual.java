@@ -1,6 +1,9 @@
 package tetris.model;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import tetris.settings.GameSettings;
 
 /**
  * A class with static methods that take TetrisPlan as an argument used to get
@@ -10,9 +13,15 @@ import java.util.Arrays;
  */
 public class PlanVisual {
 
-    public static int[][] getNextPiece(TetrisPlan plan) {
-        int next = plan.getNext();
-        return PieceFactory.createPiece(next).shape;
+    public static List<int[][]> getNextPiece(TetrisPlan plan) {
+        GameSettings gs = GameSettings.getInstance();
+        List<Integer> next = plan.getNext().subList(0, gs.previewPieceCount);
+
+        List<int[][]> result = new LinkedList();
+        for (int integer : next) {
+            result.add(PieceFactory.createPiece(integer).shape);
+        }
+        return result;
     }
 
     public static int[][] getHoldPiece(TetrisPlan plan) {

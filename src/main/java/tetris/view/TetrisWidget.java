@@ -116,7 +116,7 @@ public class TetrisWidget extends JComponent {
         g.drawString(lineCount, 0, yStart);
 
         // Draw next piece
-        piece = PlanVisual.getNextPiece(game.getPlan());
+        piece = PlanVisual.getNextPiece(game.getPlan()).getFirst();
         xStart = xOffset + (board.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
         drawPiece(piece, xStart, g, s, null);
     }
