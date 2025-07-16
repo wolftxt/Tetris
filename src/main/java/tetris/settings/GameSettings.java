@@ -23,7 +23,7 @@ public class GameSettings {
     public boolean randomColors = false;
     public int shadowPieceAlphaValue = 100;
     public Font pageFont = new Font("PageFont", Font.PLAIN, 16);
-    public int previewPieceCount = 7;
+    public int previewPieceCount = 5;
     public int DAS = 175;
     public int ARR = 15;
 }
