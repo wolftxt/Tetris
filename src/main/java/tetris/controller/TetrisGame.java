@@ -94,7 +94,7 @@ public class TetrisGame {
         }
     }
 
-    public synchronized void leftRightStart(int direction) {
+    public void leftRightStart(int direction) {
         if (!plan.isPlaying() || leftRight == direction) {
             return;
         }
@@ -105,7 +105,7 @@ public class TetrisGame {
         leftRight(direction);
     }
 
-    public synchronized void leftRightEnd(int direction) {
+    public void leftRightEnd(int direction) {
         if (!plan.isPlaying()) {
             return;
         }
