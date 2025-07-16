@@ -2,7 +2,18 @@ package tetris.model;
 
 import java.util.Arrays;
 
+/**
+ * A class with static methods that take TetrisPlan as an argument used to get
+ * useful info to be displayed
+ *
+ * @author davidwolf
+ */
 public class PlanVisual {
+
+    public static int[][] getNextPiece(TetrisPlan plan) {
+        int next = plan.getNext();
+        return PieceFactory.createPiece(next).shape;
+    }
 
     public static int[][] getHoldPiece(TetrisPlan plan) {
         return PieceFactory.createPiece(plan.getHold()).shape;

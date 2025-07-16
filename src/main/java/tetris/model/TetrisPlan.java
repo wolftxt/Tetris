@@ -39,10 +39,6 @@ public class TetrisPlan {
         playing = true;
     }
 
-    public int[][] getNextPiece() {
-        return PieceFactory.createPiece(next).shape;
-    }
-
     public boolean hold() {
         if (!playing || usedHold) {
             return false;
@@ -63,10 +59,6 @@ public class TetrisPlan {
         next = temp;
         usedHold = true;
         return true;
-    }
-
-    public Piece getPiece() {
-        return piece;
     }
 
     public void newPiece() {
