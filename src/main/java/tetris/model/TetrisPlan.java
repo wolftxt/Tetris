@@ -88,13 +88,7 @@ public class TetrisPlan {
 
     public void newNextPieces() {
         GameSettings gs = GameSettings.getInstance();
-        if (gs.randomPieces) {
-            // Completely random pieces
-            for (int i = 0; i < PIECE_COUNT; i++) {
-                Random r = new Random();
-                next.add(r.nextInt(PIECE_COUNT));
-            }
-        } else {
+        if (gs.sevenBag) {
             // 7 bag piece system
             List<Integer> add = new LinkedList();
             for (int i = 0; i < PIECE_COUNT; i++) {
@@ -102,6 +96,12 @@ public class TetrisPlan {
             }
             Collections.shuffle(add);
             next.addAll(add);
+        } else {
+            // Completely random pieces
+            for (int i = 0; i < PIECE_COUNT; i++) {
+                Random r = new Random();
+                next.add(r.nextInt(PIECE_COUNT));
+            }
         }
     }
 

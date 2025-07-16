@@ -111,6 +111,7 @@ public class TetrisGame {
         }
         if (direction == leftRight) {
             leftRightThread.interrupt();
+            leftRight = 0;
         }
     }
 
@@ -161,13 +162,13 @@ public class TetrisGame {
                 }
                 callback.repaint();
                 Thread.sleep(gs.DAS);
-                while (plan.move(direction, 0)) {
+                while (true) {
+                    plan.move(direction, 0);
                     callback.repaint();
                     Thread.sleep(gs.ARR);
                 }
             } catch (InterruptedException e) {
             }
-            leftRight = 0;
         });
     }
 }
