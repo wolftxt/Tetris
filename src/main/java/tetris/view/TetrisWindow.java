@@ -39,26 +39,26 @@ public class TetrisWindow extends javax.swing.JFrame {
 
         // Released keys map
         releasedKeys = new HashMap();
-        releasedKeys.put(cs.helpKey, () -> Popups.help());
-        releasedKeys.put(cs.newGameKey, () -> Popups.gameSpeed());
-        releasedKeys.put(cs.controllsKey, () -> Popups.configureControllsSettings());
+        releasedKeys.put(cs.HELP_KEY, () -> Popups.help());
+        releasedKeys.put(cs.NEW_GAME_KEY, () -> Popups.gameSpeed());
+        releasedKeys.put(cs.CONTROLLS_KEY, () -> Popups.configureControllsSettings());
 
-        releasedKeys.put(cs.softDropKey, () -> game.softDropEnd());
-        releasedKeys.put(cs.leftKey, () -> game.leftRightEnd(-1));
-        releasedKeys.put(cs.rightKey, () -> game.leftRightEnd(1));
+        releasedKeys.put(cs.SOFT_DROP_KEY, () -> game.softDropEnd());
+        releasedKeys.put(cs.LEFT_KEY, () -> game.leftRightEnd(-1));
+        releasedKeys.put(cs.RIGHT_KEY, () -> game.leftRightEnd(1));
 
         // Pressed keys map
         pressedKeys = new HashMap();
-        pressedKeys.put(cs.softDropKey, () -> game.softDropStart());
-        pressedKeys.put(cs.leftKey, () -> game.leftRightStart(-1));
-        pressedKeys.put(cs.rightKey, () -> game.leftRightStart(1));
+        pressedKeys.put(cs.SOFT_DROP_KEY, () -> game.softDropStart());
+        pressedKeys.put(cs.LEFT_KEY, () -> game.leftRightStart(-1));
+        pressedKeys.put(cs.RIGHT_KEY, () -> game.leftRightStart(1));
 
-        pressedKeys.put(cs.hardDropKey, () -> game.hardDrop());
-        pressedKeys.put(cs.holdKey, () -> game.hold());
-        pressedKeys.put(cs.clockwiseKey, () -> game.rotate(3));
-        pressedKeys.put(cs.clockwiseKeyAlternative, () -> game.rotate(3));
-        pressedKeys.put(cs.rotate180Key, () -> game.rotate(2));
-        pressedKeys.put(cs.counterClockwiseKey, () -> game.rotate(1));
+        pressedKeys.put(cs.HARD_DROP_KEY, () -> game.hardDrop());
+        pressedKeys.put(cs.HOLD_KEY, () -> game.hold());
+        pressedKeys.put(cs.CLOCKWISE_KEY, () -> game.rotate(3));
+        pressedKeys.put(cs.CLOCKWISE_KEY_ALTERNATIVE, () -> game.rotate(3));
+        pressedKeys.put(cs.ROTATE_180_KEY, () -> game.rotate(2));
+        pressedKeys.put(cs.COUNTER_CLOCKWISE_KEY, () -> game.rotate(1));
     }
 
     @SuppressWarnings("unchecked")

@@ -64,17 +64,17 @@ public class ControllsSettings implements Serializable {
         return result;
     }
 
-    public int hardDropKey = KeyEvent.VK_SPACE;
-    public int holdKey = KeyEvent.VK_C;
-    public int clockwiseKey = KeyEvent.VK_UP;
-    public int clockwiseKeyAlternative = KeyEvent.VK_F;
-    public int rotate180Key = KeyEvent.VK_D;
-    public int counterClockwiseKey = KeyEvent.VK_S;
-    public int softDropKey = KeyEvent.VK_DOWN;
-    public int leftKey = KeyEvent.VK_LEFT;
-    public int rightKey = KeyEvent.VK_RIGHT;
+    public int HARD_DROP_KEY = KeyEvent.VK_SPACE;
+    public int HOLD_KEY = KeyEvent.VK_C;
+    public int CLOCKWISE_KEY = KeyEvent.VK_UP;
+    public int CLOCKWISE_KEY_ALTERNATIVE = KeyEvent.VK_F;
+    public int ROTATE_180_KEY = KeyEvent.VK_D;
+    public int COUNTER_CLOCKWISE_KEY = KeyEvent.VK_S;
+    public int SOFT_DROP_KEY = KeyEvent.VK_DOWN;
+    public int LEFT_KEY = KeyEvent.VK_LEFT;
+    public int RIGHT_KEY = KeyEvent.VK_RIGHT;
 
-    public int helpKey = KeyEvent.VK_H;
-    public int newGameKey = KeyEvent.VK_N;
-    public int controllsKey = KeyEvent.VK_O;
+    public int HELP_KEY = KeyEvent.VK_H;
+    public int NEW_GAME_KEY = KeyEvent.VK_N;
+    public int CONTROLLS_KEY = KeyEvent.VK_O;
 }

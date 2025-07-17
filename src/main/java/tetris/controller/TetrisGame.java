@@ -122,11 +122,11 @@ public class TetrisGame {
         GameSettings gs = GameSettings.getInstance();
         while (plan.move(0, 1)) {
             callback.repaint();
-            Thread.sleep(gs.softDropSpeedInMs);
+            Thread.sleep(gs.SOFT_DROP_SPEED_IN_MS);
         }
         softDrop = false;
         try {
-            Thread.sleep(gs.hardDropSpeedAfterSoftDropInMs);
+            Thread.sleep(gs.HARD_DROP_SPEED_IN_MS);
         } catch (InterruptedException e) {
         } finally {
             if (!plan.move(0, 1)) {

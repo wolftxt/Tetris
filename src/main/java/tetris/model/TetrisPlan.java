@@ -88,7 +88,7 @@ public class TetrisPlan {
 
     public void newNextPieces() {
         GameSettings gs = GameSettings.getInstance();
-        if (gs.sevenBag) {
+        if (gs.SEVEN_BAG) {
             // 7 bag piece system
             List<Integer> add = new LinkedList();
             for (int i = 0; i < PIECE_COUNT; i++) {

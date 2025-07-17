@@ -136,16 +136,21 @@ public class Popups {
         GameSettings settings = GameSettings.getInstance();
         JPanel row = new JPanel(new BorderLayout(100, 10));
         
-        JLabel label = new JLabel(field.getName() + ": ");
+        String name = field.getName().replace('_', ' ').toLowerCase().replaceAll("seven", "7") + ": ";
+        String capitalized = name.substring(0, 1).toUpperCase() + name.substring(1);
+        if (capitalized.length() < 6) {
+            capitalized = capitalized.toUpperCase();
+        }
+        JLabel label = new JLabel(capitalized);
         label.setFont(settings.pageFont);
         row.add(label, BorderLayout.WEST);
         
-        JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        JPanel right = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         
         JLabel currValue = new JLabel(value);
         currValue.setHorizontalAlignment(SwingConstants.CENTER);
         currValue.setFont(settings.pageFont);
-        left.add(currValue);
+        right.add(currValue);
         if (object instanceof Color color) {
             currValue.setForeground(color);
         }
@@ -155,9 +160,9 @@ public class Popups {
         button.addActionListener(e -> {
             setSetting(field, object, currValue);
         });
-        left.add(button);
+        right.add(button);
         
-        row.add(left, BorderLayout.EAST);
+        row.add(right, BorderLayout.EAST);
         
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         panel.add(row);

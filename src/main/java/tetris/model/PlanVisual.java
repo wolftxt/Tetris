@@ -15,7 +15,7 @@ public class PlanVisual {
 
     public static List<int[][]> getNextPiece(TetrisPlan plan) {
         GameSettings gs = GameSettings.getInstance();
-        List<Integer> next = plan.getNext().subList(0, gs.previewPieceCount);
+        List<Integer> next = plan.getNext().subList(0, gs.PREVIEW_PIECE_COUNT);
 
         List<int[][]> result = new LinkedList();
         for (int integer : next) {

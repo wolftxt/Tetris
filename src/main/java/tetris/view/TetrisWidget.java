@@ -41,7 +41,7 @@ public class TetrisWidget extends JComponent {
         }
         game = new TetrisGame(this, timeToFall);
         GameSettings gs = GameSettings.getInstance();
-        if (gs.randomColors) {
+        if (gs.RANDOM_COLORS) {
             generateRandomColors();
         } else {
             pieceColors = new Color[]{gs.O, gs.L, gs.J, gs.T, gs.Z, gs.S, gs.I};
@@ -108,7 +108,7 @@ public class TetrisWidget extends JComponent {
         piece = PlanVisual.getPieceShadow(game.getPlan());
         int index = game.getPlan().getPiece().getIndex();
         Color c = pieceColors[index];
-        Color opaque = new Color(c.getRed(), c.getGreen(), c.getBlue(), settings.shadowPieceAlphaValue);
+        Color opaque = new Color(c.getRed(), c.getGreen(), c.getBlue(), settings.SHADOW_PIECE_ALPHA_VALUE);
         drawPiece(piece, xStart, 0, g, s, opaque);
 
         // Draw hold piece
