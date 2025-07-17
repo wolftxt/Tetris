@@ -125,10 +125,14 @@ public class TetrisGame {
             Thread.sleep(gs.softDropSpeedInMs);
         }
         softDrop = false;
-        Thread.sleep(gs.hardDropSpeedAfterSoftDropInMs);
-        if (!plan.move(0, 1)) {
-            plan.placePiece();
-            plan.newPiece();
+        try {
+            Thread.sleep(gs.hardDropSpeedAfterSoftDropInMs);
+        } catch (InterruptedException e) {
+        } finally {
+            if (!plan.move(0, 1)) {
+                plan.placePiece();
+                plan.newPiece();
+            }
         }
     }
 
