@@ -113,7 +113,7 @@ public class Piece {
         // length 4 is I piece
         int[][][][] SRS = shape.length == 4 ? SRSI : SRS3x3;
         for (int[] test : SRS[originalState][rotationState]) {
-            if (plan.move(test[0], test[1])) {
+            if (plan.move(test[0], -test[1])) { // minus for y coordinate is required because the wiki uses the y coordinate the opposite way
                 return true;
             }
         }
