@@ -126,7 +126,10 @@ public class TetrisGame {
         }
         softDrop = false;
         Thread.sleep(gs.hardDropSpeedAfterSoftDropInMs);
-        hardDrop();
+        if (!plan.move(0, 1)) {
+            plan.placePiece();
+            plan.newPiece();
+        }
     }
 
     private void initiateThreads(int timeToFall) {
