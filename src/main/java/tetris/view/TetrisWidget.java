@@ -46,6 +46,7 @@ public class TetrisWidget extends JComponent {
         } else {
             pieceColors = new Color[]{gs.O, gs.L, gs.J, gs.T, gs.Z, gs.S, gs.I};
         }
+        this.repaint();
     }
 
     private void generateRandomColors() {
