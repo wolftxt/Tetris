@@ -72,7 +72,7 @@ public class GameSettings implements Serializable {
     public int DAS = 175;
     public int ARR = 15;
     public boolean randomColors = false;
-    public boolean sevenBag = false;
+    public boolean sevenBag = true;
     public Color O = Color.YELLOW;
     public Color L = Color.ORANGE;
     public Color J = Color.BLUE;

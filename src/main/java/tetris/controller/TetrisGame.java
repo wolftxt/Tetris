@@ -69,28 +69,8 @@ public class TetrisGame {
         if (!plan.isPlaying()) {
             return;
         }
-        for (int i = 0; i < rotateTimes; i++) {
-            plan.getPiece().rotate();
-        }
-        settlePieceInPlace();
-        if (!plan.move(0, 0)) {
-            for (int i = 0; i < 4 - rotateTimes; i++) {
-                plan.getPiece().rotate();
-            }
-            return;
-        }
-        this.callback.repaint();
-    }
-
-    /**
-     * Method used to move around a piece after rotating to find a valid place.
-     * Allows the piece to rotate when close to the ceiling or to the walls.
-     */
-    private void settlePieceInPlace() {
-        if (plan.move(0, 0)
-                || plan.move(0, 1)
-                || plan.move(1, 0) || plan.move(-1, 0)
-                || plan.move(2, 0) || plan.move(-2, 0)) {
+        if (plan.getPiece().rotateSRS(rotateTimes, plan)) {
+            this.callback.repaint();
         }
     }
 
