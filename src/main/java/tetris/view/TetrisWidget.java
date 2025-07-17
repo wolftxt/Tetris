@@ -36,7 +36,10 @@ public class TetrisWidget extends JComponent {
     }
 
     public void newGame(int timeToFall) {
-        this.game = new TetrisGame(this, timeToFall);
+        if (game != null) {
+            game.terminateGame();
+        }
+        game = new TetrisGame(this, timeToFall);
         GameSettings gs = GameSettings.getInstance();
         if (gs.randomColors) {
             generateRandomColors();

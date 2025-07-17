@@ -17,17 +17,29 @@ public class TetrisGame {
     private final TetrisWidget callback;
     private Thread gameLoopThread;
     private Thread leftRightThread;
-    private boolean softDrop;
     private int leftRight;
+    private boolean softDrop;
+
+    private boolean terminated;
 
     public TetrisGame(TetrisWidget callback, int timeToFall) {
         softDrop = false;
+        terminated = false;
         plan = new TetrisPlan();
         this.callback = callback;
 
         plan.newNextPieces();
         plan.newPiece();
         initiateThreads(timeToFall);
+    }
+
+    public void terminateGame() {
+        terminated = true;
+        plan.setPlaying(false);
+        if (leftRightThread != null) {
+            leftRightThread.interrupt();
+        }
+        gameLoopThread.interrupt();
     }
 
     public TetrisPlan getPlan() {
@@ -129,7 +141,9 @@ public class TetrisGame {
                 } catch (InterruptedException e) {
                 }
             }
-            Popups.gameSpeed();
+            if (!terminated) {
+                Popups.gameSpeed();
+            }
         });
     }
 

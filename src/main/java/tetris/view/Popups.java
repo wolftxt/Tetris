@@ -17,9 +17,9 @@ import tetris.settings.GameSettings;
  * @author davidwolf
  */
 public class Popups {
-
+    
     public static TetrisWindow parent;
-
+    
     public static void help() {
         Scanner sc = new Scanner(Popups.class.getResourceAsStream("/help.txt"));
         sc.useDelimiter("\\A");
@@ -57,12 +57,12 @@ public class Popups {
     public static void configureControllsSettings() {
         ControllsSettings cs = ControllsSettings.getInstance();
         GameSettings gs = GameSettings.getInstance();
-
+        
         JDialog dialog = new JDialog(parent, "Configure settings:", true);
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
+        
         for (Field field : cs.getClass().getDeclaredFields()) {
             Object object;
             try {
@@ -73,7 +73,7 @@ public class Popups {
             String value = KeyEvent.getKeyText((int) object);
             addRow(panel, field, value);
         }
-
+        
         JButton resetKeys = new JButton("Reset all keybind settings to defaults");
         resetKeys.setFont(gs.pageFont);
         resetKeys.addActionListener(e -> {
@@ -84,7 +84,7 @@ public class Popups {
         JPanel wrapperKeys = new JPanel(new FlowLayout(FlowLayout.LEFT));
         wrapperKeys.add(resetKeys);
         panel.add(wrapperKeys);
-
+        
         for (Field field : gs.getClass().getDeclaredFields()) {
             Object object;
             try {
@@ -94,7 +94,7 @@ public class Popups {
             }
             addRow(panel, field, object);
         }
-
+        
         JButton resetGameSettings = new JButton("Reset all game settings to defaults");
         resetGameSettings.setFont(gs.pageFont);
         resetGameSettings.addActionListener(e -> {
@@ -105,13 +105,13 @@ public class Popups {
         JPanel wrapperGame = new JPanel(new FlowLayout(FlowLayout.LEFT));
         wrapperGame.add(resetGameSettings);
         panel.add(wrapperGame);
-
+        
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         dialog.add(scrollPane, BorderLayout.CENTER);
-
+        
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
@@ -135,13 +135,13 @@ public class Popups {
         }
         GameSettings settings = GameSettings.getInstance();
         JPanel row = new JPanel(new BorderLayout(100, 10));
-
+        
         JLabel label = new JLabel(field.getName() + ": ");
         label.setFont(settings.pageFont);
         row.add(label, BorderLayout.WEST);
-
+        
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-
+        
         JLabel currValue = new JLabel(value);
         currValue.setHorizontalAlignment(SwingConstants.CENTER);
         currValue.setFont(settings.pageFont);
@@ -149,21 +149,21 @@ public class Popups {
         if (object instanceof Color color) {
             currValue.setForeground(color);
         }
-
+        
         JButton button = new JButton("Change");
         button.setFont(settings.pageFont);
         button.addActionListener(e -> {
             setSetting(field, object, currValue);
         });
         left.add(button);
-
+        
         row.add(left, BorderLayout.EAST);
-
+        
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         panel.add(row);
         panel.add(Box.createVerticalStrut(10));
     }
-
+    
     private static String getStringValue(Object object) {
         switch (object) {
             case String s -> {
@@ -183,7 +183,7 @@ public class Popups {
             }
         }
     }
-
+    
     private static void setSetting(Field field, Object object, JLabel label) {
         GameSettings gs = GameSettings.getInstance();
         try {
@@ -215,10 +215,10 @@ public class Popups {
                 case String s -> {
                     label.setForeground(Color.YELLOW);
                     label.setText("Press key");
-
+                    
                     JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(label);
                     dialog.requestFocusInWindow();
-
+                    
                     KeyAdapter keyAdapter = new KeyAdapter() {
                         @Override
                         public void keyPressed(KeyEvent evt) {
@@ -226,7 +226,7 @@ public class Popups {
                                 field.setInt(ControllsSettings.getInstance(), evt.getKeyCode());
                                 ControllsSettings.save();
                                 parent.initMaps();
-
+                                
                                 label.setText(KeyEvent.getKeyText(evt.getKeyCode()));
                                 label.setForeground(Color.WHITE);
                             } catch (IllegalAccessException | IOException ex) {
