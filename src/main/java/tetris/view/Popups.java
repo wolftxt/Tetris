@@ -5,7 +5,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Scanner;
 import javax.swing.*;
 import tetris.settings.ControllsSettings;
