@@ -68,9 +68,9 @@ public class GameSettings implements Serializable {
     public int SHADOW_PIECE_ALPHA_VALUE = 100;
     public int PREVIEW_PIECE_COUNT = 5;
     public int SOFT_DROP_SPEED_IN_MS = 10;
-    public int HARD_DROP_SPEED_IN_MS = 1000;
-    public int DAS = 175;
-    public int ARR = 15;
+    public int WAIT_TIME_AFTER_SOFT_DROP = 500;
+    public int DAS = 150;
+    public int ARR = 10;
     public boolean RANDOM_COLORS = false;
     public boolean SEVEN_BAG = true;
     public Color O = Color.YELLOW;

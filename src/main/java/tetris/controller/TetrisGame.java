@@ -19,6 +19,7 @@ public class TetrisGame {
     private Thread leftRightThread;
     private int leftRight;
     private boolean softDrop;
+    private boolean moved;
 
     private boolean terminated;
 
@@ -54,6 +55,10 @@ public class TetrisGame {
         }
         plan.placePiece();
         plan.newPiece();
+        if (softDrop) {
+            softDrop = false;
+            gameLoopThread.interrupt();
+        }
         callback.repaint();
     }
 
@@ -66,7 +71,6 @@ public class TetrisGame {
 
     public void softDropEnd() {
         if (softDrop) {
-            softDrop = false;
             gameLoopThread.interrupt();
         }
     }
@@ -82,6 +86,7 @@ public class TetrisGame {
             return;
         }
         if (plan.getPiece().rotateSRS(rotateTimes, plan)) {
+            moved = true;
             this.callback.repaint();
         }
     }
@@ -118,22 +123,39 @@ public class TetrisGame {
         }
     }
 
-    private void softDrop() throws InterruptedException {
-        GameSettings gs = GameSettings.getInstance();
-        while (plan.move(0, 1)) {
-            callback.repaint();
-            Thread.sleep(gs.SOFT_DROP_SPEED_IN_MS);
-        }
-        softDrop = false;
+    /**
+     * Soft drop implementation. Moves down until key is released or reaches the
+     * ground. Then if the user keeps moving the piece, gives the user up to 10x
+     * gs.WAIT_TIME_AFTER_SOFT_DROP time until it drops.
+     */
+    private void softDrop() {
         try {
-            Thread.sleep(gs.HARD_DROP_SPEED_IN_MS);
-        } catch (InterruptedException e) {
-        } finally {
+            GameSettings gs = GameSettings.getInstance();
+            while (plan.move(0, 1)) {
+                callback.repaint();
+                Thread.sleep(gs.SOFT_DROP_SPEED_IN_MS);
+            }
+            int count = 0;
+            do {
+                count++;
+                moved = false;
+                long endTime = System.currentTimeMillis() + gs.WAIT_TIME_AFTER_SOFT_DROP;
+                while (System.currentTimeMillis() < endTime) { // Guarantees that Thread waits correct amount of time even when interrupted
+                    try {
+                        Thread.sleep(endTime - System.currentTimeMillis());
+                    } catch (InterruptedException e) {
+                    }
+                }
+            } while (moved && count < 10 && softDrop);
+
             if (!plan.move(0, 1)) {
                 plan.placePiece();
                 plan.newPiece();
+                callback.repaint();
             }
+        } catch (InterruptedException e) {
         }
+        softDrop = false;
     }
 
     private void initiateThreads(int timeToFall) {
@@ -161,11 +183,14 @@ public class TetrisGame {
                 if (!plan.move(direction, 0)) {
                     return;
                 }
+                moved = true;
                 callback.repaint();
                 Thread.sleep(gs.DAS);
                 while (true) {
-                    plan.move(direction, 0);
-                    callback.repaint();
+                    if (plan.move(direction, 0)) {
+                        moved = true;
+                        callback.repaint();
+                    }
                     Thread.sleep(gs.ARR);
                 }
             } catch (InterruptedException e) {
