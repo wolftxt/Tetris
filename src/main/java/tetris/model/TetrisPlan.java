@@ -20,7 +20,7 @@ public class TetrisPlan {
 
     public static final int PIECE_COUNT = 7;
     public static final int WIDTH = 10;
-    public static final int HEIGHT = 20;
+    public static final int HEIGHT = 21;
 
     private int[][] board;
     private int lineClearCount;
@@ -78,9 +78,10 @@ public class TetrisPlan {
         piece = PieceFactory.createPiece(nextPiece);
 
         xStart = WIDTH / 2 - (piece.getSize() + 1) / 2;
-        yStart = 0;
+        yStart = 0; // DO NOT REMOVE, otherwise the new piece will bump into the old one in the next condition and the piece wont fit in the board.
         while (move(0, -1)) {
         }
+        yStart += HEIGHT - 20;
         if (!isLegal(0, 0)) {
             this.playing = false;
         }
@@ -152,10 +153,6 @@ public class TetrisPlan {
         board = newBoard;
     }
 
-    public boolean isPlaying() {
-        return playing;
-    }
-
     /**
      * Method that determines if the piece would overlap with placed pieces or
      * stick out of the board. In those cases it returns false.
@@ -187,6 +184,6 @@ public class TetrisPlan {
     }
 
     private boolean outOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x >= board.length || y >= board[0].length;
+        return x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT;
     }
 }
