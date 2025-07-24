@@ -88,21 +88,12 @@ public class TetrisWidget extends JComponent {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         // Draw board
-        for (int x = 0; x < board.length; x++) {
-            for (int y = yErrorFactor; y < board[0].length; y++) {
-                g.setColor(GRID_COLOR);
-                g.drawRect(xOffset + x * s, (y - yErrorFactor) * s, s, s);
-                if (board[x][y] == -1) {
-                    continue;
-                }
-                g.setColor(pieceColors[board[x][y]]);
-                g.fillRect(xOffset + x * s, (y - yErrorFactor) * s, s, s);
-            }
-        }
+        int xStart = xOffset;
+        drawBoard(board, xStart, 0, g, s, null);
 
         // Draw current piece
         int[][] piece = PlanVisual.getCurrentPiece(game.getPlan());
-        int xStart = xOffset;
+        xStart = xOffset;
         drawBoard(piece, xStart, 0, g, s, null);
 
         // Draw piece shadow
@@ -145,9 +136,10 @@ public class TetrisWidget extends JComponent {
                     continue;
                 }
                 if (pieceColor == null) {
-                    pieceColor = pieceColors[board[x][y]];
+                    g.setColor(pieceColors[board[x][y]]);
+                } else {
+                    g.setColor(pieceColor);
                 }
-                g.setColor(pieceColor);
                 g.fillRect(xStart + x * s, yStart + (y - yErrorFactor) * s, s, s);
             }
         }
