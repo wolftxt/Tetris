@@ -151,8 +151,8 @@ public class TetrisGame {
             if (!plan.move(0, 1)) {
                 plan.placePiece();
                 plan.newPiece();
-                callback.repaint();
             }
+            callback.repaint();
         } catch (InterruptedException e) {
         }
         softDrop = false;
