@@ -132,9 +132,12 @@ public class TetrisGame {
         try {
             GameSettings gs = GameSettings.getInstance();
             while (plan.move(0, 1)) {
-                callback.repaint();
+                if (gs.SOFT_DROP_SPEED_IN_MS > 0) {
+                    callback.repaint();
+                }
                 Thread.sleep(gs.SOFT_DROP_SPEED_IN_MS);
             }
+            callback.repaint();
             int count = 0;
             do {
                 count++;
@@ -184,13 +187,18 @@ public class TetrisGame {
                     return;
                 }
                 moved = true;
-                callback.repaint();
+                if (gs.DAS > 0) {
+                    callback.repaint();
+                }
                 Thread.sleep(gs.DAS);
                 while (true) {
                     if (plan.move(direction, 0)) {
                         moved = true;
-                        callback.repaint();
+                        if (gs.ARR > 0) {
+                            callback.repaint();
+                        }
                     }
+                    callback.repaint();
                     Thread.sleep(gs.ARR);
                 }
             } catch (InterruptedException e) {
