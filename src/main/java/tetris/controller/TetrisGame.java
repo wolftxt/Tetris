@@ -66,9 +66,6 @@ public class TetrisGame {
 
     public void softDropEnd() {
         softDrop = false;
-        if (!moved) {
-            gameLoopThread.interrupt();
-        }
     }
 
     public void hold() {
@@ -125,6 +122,9 @@ public class TetrisGame {
         try {
             GameSettings gs = GameSettings.getInstance();
             while (plan.move(0, 1)) {
+                if (!softDrop) {
+                    return;
+                }
                 if (gs.SOFT_DROP_SPEED_IN_MS > 0) {
                     callback.repaint();
                 }
@@ -136,7 +136,7 @@ public class TetrisGame {
                 count++;
                 moved = false;
                 Thread.sleep(gs.WAIT_TIME_AFTER_SOFT_DROP);
-            } while (moved && count < 10 && softDrop);
+            } while (moved && count < 10);
 
             if (!plan.move(0, 1)) {
                 plan.placePiece();
@@ -195,13 +195,13 @@ public class TetrisGame {
     }
 
     public void checkSoftDrop() {
+        if (!plan.isLegal(0, 1)) {
+            moved = true;
+        }
         if (!softDrop) {
             return;
         }
-        if (!plan.isLegal(0, 1) && !moved) { // 00
-            moved = true;
-        }
-        if (plan.isLegal(0, 1) && moved) { // 11
+        if (plan.isLegal(0, 1) && moved) {
             gameLoopThread.interrupt();
         }
     }

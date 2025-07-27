@@ -50,14 +50,12 @@ public class TetrisPlan {
         }
         if (hold == -1) {
             hold = piece.getIndex();
-            piece = null;
             newPiece();
             usedHold = true;
             return true;
         }
         int temp = hold;
         hold = piece.getIndex();
-        piece = null;
         newPiece(temp);
         usedHold = true;
         return true;
@@ -72,9 +70,6 @@ public class TetrisPlan {
 
     public void newPiece(int nextPiece) {
         usedHold = false;
-        if (piece != null) {
-            throw new RuntimeException("Tried to make a new piece but a piece already exists");
-        }
         piece = PieceFactory.createPiece(nextPiece);
 
         xStart = WIDTH / 2 - (piece.getSize() + 1) / 2;
@@ -128,7 +123,6 @@ public class TetrisPlan {
                 board[x + xStart][y + yStart] = value;
             }
         }
-        this.piece = null; // Ensures NullPointerException will be thrown if code tries to use the non-existent piece
 
         // clear lines
         int[][] newBoard = new int[WIDTH][HEIGHT];
