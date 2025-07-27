@@ -38,9 +38,7 @@ public class TetrisGame {
     public void terminateGame() {
         terminated = true;
         plan.setPlaying(false);
-        if (leftRightThread != null) {
-            leftRightThread.interrupt();
-        }
+        leftRightThread.interrupt();
         gameLoopThread.interrupt();
     }
 
@@ -56,10 +54,6 @@ public class TetrisGame {
         }
         plan.placePiece();
         plan.newPiece();
-        if (softDrop) {
-            softDrop = false;
-            gameLoopThread.interrupt();
-        }
         callback.repaint();
     }
 
@@ -71,7 +65,8 @@ public class TetrisGame {
     }
 
     public void softDropEnd() {
-        if (softDrop) {
+        softDrop = false;
+        if (!moved) {
             gameLoopThread.interrupt();
         }
     }
@@ -87,7 +82,7 @@ public class TetrisGame {
             return;
         }
         if (plan.getPiece().rotateSRS(rotateTimes, plan)) {
-            moved = true;
+            checkSoftDrop();
             this.callback.repaint();
         }
     }
@@ -140,13 +135,7 @@ public class TetrisGame {
             do {
                 count++;
                 moved = false;
-                long endTime = System.currentTimeMillis() + gs.WAIT_TIME_AFTER_SOFT_DROP;
-                while (System.currentTimeMillis() < endTime) { // Guarantees that Thread waits correct amount of time even when interrupted
-                    try {
-                        Thread.sleep(endTime - System.currentTimeMillis());
-                    } catch (InterruptedException e) {
-                    }
-                }
+                Thread.sleep(gs.WAIT_TIME_AFTER_SOFT_DROP);
             } while (moved && count < 10 && softDrop);
 
             if (!plan.move(0, 1)) {
@@ -156,7 +145,6 @@ public class TetrisGame {
             callback.repaint();
         } catch (InterruptedException e) {
         }
-        softDrop = false;
     }
 
     private void initiateThreads(int timeToFall) {
@@ -179,20 +167,20 @@ public class TetrisGame {
         });
 
         leftRightThread = Thread.ofVirtual().start(() -> {
-            while (true) {
+            while (plan.isPlaying()) {
                 try {
                     while (leftRight == 0) {
                         LockSupport.park();
                     }
                     plan.move(leftRight, 0);
-                    moved = true;
+                    checkSoftDrop();
                     if (gs.DAS > 0) {
                         callback.repaint();
                     }
                     Thread.sleep(gs.DAS);
-                    while (true) {
+                    while (!Thread.interrupted()) {
                         if (plan.move(leftRight, 0)) {
-                            moved = true;
+                            checkSoftDrop();
                             if (gs.ARR > 0) {
                                 callback.repaint();
                             }
@@ -205,4 +193,17 @@ public class TetrisGame {
             }
         });
     }
+
+    public void checkSoftDrop() {
+        if (!softDrop) {
+            return;
+        }
+        if (!plan.isLegal(0, 1) && !moved) { // 00
+            moved = true;
+        }
+        if (plan.isLegal(0, 1) && moved) { // 11
+            gameLoopThread.interrupt();
+        }
+    }
+
 }
