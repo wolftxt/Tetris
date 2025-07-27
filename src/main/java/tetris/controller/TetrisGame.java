@@ -1,5 +1,6 @@
 package tetris.controller;
 
+import java.util.concurrent.locks.LockSupport;
 import tetris.model.TetrisPlan;
 import tetris.settings.GameSettings;
 import tetris.view.Popups;
@@ -96,10 +97,7 @@ public class TetrisGame {
             return;
         }
         leftRight = direction;
-        if (leftRightThread != null) {
-            leftRightThread.interrupt();
-        }
-        leftRight(direction);
+        LockSupport.unpark(leftRightThread);
     }
 
     public void leftRightEnd(int direction) {
@@ -107,8 +105,8 @@ public class TetrisGame {
             return;
         }
         if (direction == leftRight) {
-            leftRightThread.interrupt();
             leftRight = 0;
+            leftRightThread.interrupt();
         }
     }
 
@@ -162,6 +160,8 @@ public class TetrisGame {
     }
 
     private void initiateThreads(int timeToFall) {
+        GameSettings gs = GameSettings.getInstance();
+
         gameLoopThread = Thread.ofVirtual().start(() -> {
             while (plan.isPlaying()) {
                 try {
@@ -177,31 +177,31 @@ public class TetrisGame {
                 Popups.gameSpeed();
             }
         });
-    }
 
-    private void leftRight(int direction) {
-        GameSettings gs = GameSettings.getInstance();
         leftRightThread = Thread.ofVirtual().start(() -> {
-            try {
-                if (!plan.move(direction, 0)) {
-                    return;
-                }
-                moved = true;
-                if (gs.DAS > 0) {
-                    callback.repaint();
-                }
-                Thread.sleep(gs.DAS);
-                while (true) {
-                    if (plan.move(direction, 0)) {
-                        moved = true;
-                        if (gs.ARR > 0) {
-                            callback.repaint();
-                        }
+            while (true) {
+                try {
+                    while (leftRight == 0) {
+                        LockSupport.park();
                     }
-                    callback.repaint();
-                    Thread.sleep(gs.ARR);
+                    plan.move(leftRight, 0);
+                    moved = true;
+                    if (gs.DAS > 0) {
+                        callback.repaint();
+                    }
+                    Thread.sleep(gs.DAS);
+                    while (true) {
+                        if (plan.move(leftRight, 0)) {
+                            moved = true;
+                            if (gs.ARR > 0) {
+                                callback.repaint();
+                            }
+                        }
+                        callback.repaint();
+                        Thread.sleep(gs.ARR);
+                    }
+                } catch (InterruptedException e) {
                 }
-            } catch (InterruptedException e) {
             }
         });
     }
