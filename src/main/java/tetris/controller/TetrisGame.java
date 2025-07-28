@@ -1,6 +1,7 @@
 package tetris.controller;
 
 import java.util.concurrent.locks.LockSupport;
+import javax.swing.SwingUtilities;
 import tetris.model.TetrisPlan;
 import tetris.settings.GameSettings;
 import tetris.view.Popups;
@@ -38,15 +39,20 @@ public class TetrisGame {
     public void terminateGame() {
         terminated = true;
         plan.setPlaying(false);
-        leftRightThread.interrupt();
         gameLoopThread.interrupt();
+        leftRightThread.interrupt();
+        try {
+            gameLoopThread.join();
+            leftRightThread.join();
+        } catch (InterruptedException ex) {
+        }
     }
 
     public TetrisPlan getPlan() {
         return plan;
     }
 
-    public void hardDrop() {
+    public synchronized void hardDrop() {
         if (!plan.isPlaying()) {
             return;
         }
@@ -54,7 +60,7 @@ public class TetrisGame {
         }
         plan.placePiece();
         plan.newPiece();
-        callback.repaint();
+        repaint();
     }
 
     public void softDropStart() {
@@ -68,19 +74,19 @@ public class TetrisGame {
         softDrop = false;
     }
 
-    public void hold() {
+    public synchronized void hold() {
         if (plan.hold()) {
-            this.callback.repaint();
+            repaint();
         }
     }
 
-    public void rotate(int rotateTimes) {
+    public synchronized void rotate(int rotateTimes) {
         if (!plan.isPlaying()) {
             return;
         }
         if (plan.getPiece().rotateSRS(rotateTimes, plan)) {
             checkSoftDrop();
-            this.callback.repaint();
+            repaint();
         }
     }
 
@@ -105,11 +111,13 @@ public class TetrisGame {
     private void gameLoop(int timeToFall) throws InterruptedException {
         while (plan.isPlaying()) {
             Thread.sleep(timeToFall);
-            if (!plan.move(0, 1)) {
-                plan.placePiece();
-                plan.newPiece();
+            synchronized (this) {
+                if (!plan.move(0, 1)) {
+                    plan.placePiece();
+                    plan.newPiece();
+                }
+                repaint();
             }
-            callback.repaint();
         }
     }
 
@@ -121,16 +129,32 @@ public class TetrisGame {
     private void softDrop() {
         try {
             GameSettings gs = GameSettings.getInstance();
-            while (plan.move(0, 1)) {
+            while (plan.isLegal(0, 1)) {
                 if (!softDrop) {
                     return;
                 }
-                if (gs.SOFT_DROP_SPEED_IN_MS > 0) {
-                    callback.repaint();
+                synchronized (this) {
+                    if (gs.SOFT_DROP_SPEED_IN_MS == 0) {
+                        while (plan.move(0, 1)) {
+                        }
+                        repaint();
+                        continue;
+                    }
+                    if (plan.move(0, 1)) {
+                        repaint();
+                    }
                 }
-                Thread.sleep(gs.SOFT_DROP_SPEED_IN_MS);
+                long endTime = System.currentTimeMillis() + gs.SOFT_DROP_SPEED_IN_MS;
+                while (System.currentTimeMillis() < endTime && plan.isPlaying()) {
+                    try { // Ensures the correct sleep time even when interrupted
+                        Thread.sleep(endTime - System.currentTimeMillis());
+                    } catch (InterruptedException e) {
+                    }
+                }
+                if (!plan.isPlaying()) {
+                    return;
+                }
             }
-            callback.repaint();
             int count = 0;
             do {
                 count++;
@@ -138,11 +162,13 @@ public class TetrisGame {
                 Thread.sleep(gs.WAIT_TIME_AFTER_SOFT_DROP);
             } while (moved && count < 10);
 
-            if (!plan.move(0, 1)) {
-                plan.placePiece();
-                plan.newPiece();
+            synchronized (this) {
+                if (!plan.move(0, 1)) {
+                    plan.placePiece();
+                    plan.newPiece();
+                }
+                repaint();
             }
-            callback.repaint();
         } catch (InterruptedException e) {
         }
     }
@@ -169,23 +195,35 @@ public class TetrisGame {
         leftRightThread = Thread.ofVirtual().start(() -> {
             while (plan.isPlaying()) {
                 try {
-                    while (leftRight == 0) {
+                    while (plan.isPlaying() && leftRight == 0) {
                         LockSupport.park();
                     }
-                    plan.move(leftRight, 0);
-                    checkSoftDrop();
-                    if (gs.DAS > 0) {
-                        callback.repaint();
-                    }
-                    Thread.sleep(gs.DAS);
-                    while (!Thread.interrupted()) {
+                    synchronized (this) {
                         if (plan.move(leftRight, 0)) {
                             checkSoftDrop();
-                            if (gs.ARR > 0) {
-                                callback.repaint();
+                            if (gs.DAS > 0) {
+                                repaint();
                             }
                         }
-                        callback.repaint();
+                    }
+                    Thread.sleep(gs.DAS);
+                    while (!Thread.interrupted() && plan.isPlaying()) {
+                        while (!plan.isLegal(leftRight, 0)) {
+                            Thread.sleep(5);
+                        }
+                        synchronized (this) {
+                            if (gs.ARR == 0) {
+                                while (plan.move(leftRight, 0)) {
+                                    checkSoftDrop();
+                                }
+                                repaint();
+                                continue;
+                            }
+                            if (plan.move(leftRight, 0)) {
+                                checkSoftDrop();
+                                repaint();
+                            }
+                        }
                         Thread.sleep(gs.ARR);
                     }
                 } catch (InterruptedException e) {
@@ -194,16 +232,22 @@ public class TetrisGame {
         });
     }
 
-    public void checkSoftDrop() {
-        if (!plan.isLegal(0, 1)) {
-            moved = true;
-        }
+    private synchronized void checkSoftDrop() {
+        moved = true;
         if (!softDrop) {
             return;
         }
-        if (plan.isLegal(0, 1) && moved) {
+        if (plan.isLegal(0, 1)) {
             gameLoopThread.interrupt();
         }
+    }
+
+    public void repaint() {
+        SwingUtilities.invokeLater(() -> {
+            synchronized (TetrisGame.this) {
+                callback.repaint();
+            }
+        });
     }
 
 }
