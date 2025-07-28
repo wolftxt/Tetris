@@ -5,6 +5,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 import tetris.controller.TetrisGame;
 import tetris.settings.ControllsSettings;
 
@@ -16,6 +18,7 @@ import tetris.settings.ControllsSettings;
  */
 public class TetrisWindow extends javax.swing.JFrame {
 
+    private LinkedBlockingQueue<Runnable> userInputs;
     private Map<Integer, Runnable> releasedKeys;
     private Map<Integer, Runnable> pressedKeys;
 
@@ -27,6 +30,16 @@ public class TetrisWindow extends javax.swing.JFrame {
             }
         });
         initMaps();
+
+        userInputs = new LinkedBlockingQueue();
+        Thread.ofVirtual().start(() -> {
+            while (true) {
+                try {
+                    userInputs.take().run();
+                } catch (InterruptedException ex) {
+                }
+            }
+        });
     }
 
     public TetrisWidget getWidget() {
@@ -93,13 +106,17 @@ public class TetrisWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tetrisWidget1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyReleased
-        releasedKeys.getOrDefault(evt.getKeyCode(), () -> {
-        }).run();
+        Runnable method = releasedKeys.get(evt.getKeyCode());
+        if (method != null) {
+            userInputs.add(method);
+        }
     }//GEN-LAST:event_tetrisWidget1KeyReleased
 
     private void tetrisWidget1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tetrisWidget1KeyPressed
-        pressedKeys.getOrDefault(evt.getKeyCode(), () -> {
-        }).run();
+        Runnable method = pressedKeys.get(evt.getKeyCode());
+        if (method != null) {
+            userInputs.add(method);
+        }
     }//GEN-LAST:event_tetrisWidget1KeyPressed
 
     public static void main(String args[]) {
