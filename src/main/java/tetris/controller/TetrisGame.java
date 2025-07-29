@@ -95,7 +95,7 @@ public class TetrisGame {
             return;
         }
         leftRight = direction;
-        LockSupport.unpark(leftRightThread);
+        leftRightThread.interrupt();
     }
 
     public void leftRightEnd(int direction) {
