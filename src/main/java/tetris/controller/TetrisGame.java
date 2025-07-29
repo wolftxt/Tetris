@@ -60,8 +60,7 @@ public class TetrisGame {
         }
         while (plan.move(0, 1)) {
         }
-        plan.placePiece();
-        plan.newPiece();
+        placePiece();
         checkSoftDrop();
         checkLRlegality();
         repaint();
@@ -121,8 +120,7 @@ public class TetrisGame {
             Thread.sleep(timeToFall);
             synchronized (this) {
                 if (!plan.move(0, 1)) {
-                    plan.placePiece();
-                    plan.newPiece();
+                    placePiece();
                 }
                 checkLRlegality();
                 repaint();
@@ -175,8 +173,7 @@ public class TetrisGame {
 
             synchronized (this) {
                 if (!plan.move(0, 1)) {
-                    plan.placePiece();
-                    plan.newPiece();
+                    placePiece();
                 }
                 checkLRlegality();
                 repaint();
@@ -249,6 +246,14 @@ public class TetrisGame {
                 }
             }
         });
+    }
+
+    private void placePiece() {
+        plan.placePiece();
+        if (!plan.newPiece()) {
+            leftRightThread.interrupt();
+            gameLoopThread.interrupt();
+        }
     }
 
     private synchronized void checkSoftDrop() {

@@ -61,14 +61,14 @@ public class TetrisPlan {
         return true;
     }
 
-    public void newPiece() {
-        newPiece(next.removeFirst());
-        if (next.size() <= PIECE_COUNT) {
+    public boolean newPiece() {
+        if (next.size() - 1 <= PIECE_COUNT) {
             newNextPieces();
         }
+        return newPiece(next.removeFirst());
     }
 
-    public void newPiece(int nextPiece) {
+    public boolean newPiece(int nextPiece) {
         usedHold = false;
         piece = PieceFactory.createPiece(nextPiece);
 
@@ -80,6 +80,7 @@ public class TetrisPlan {
         if (!isLegal(0, 0)) {
             this.playing = false;
         }
+        return playing;
     }
 
     public void newNextPieces() {
