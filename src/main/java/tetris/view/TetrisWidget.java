@@ -87,6 +87,14 @@ public class TetrisWidget extends JComponent {
         g.setColor(BG);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
+        // Draw grid
+        g.setColor(GRID_COLOR);
+        for (int x = 0; x < board.length; x++) {
+            for (int y = yErrorFactor; y < board[0].length; y++) {
+                g.drawRect(xOffset + x * s, (y - yErrorFactor) * s, s, s);
+            }
+        }
+
         // Draw board
         int xStart = xOffset;
         drawBoard(board, xStart, 0, g, s, null);
@@ -108,36 +116,36 @@ public class TetrisWidget extends JComponent {
         xStart = xOffset - (piece.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
         drawPiece(piece, xStart, 0, g, s);
 
-        // Draw line count
-        String lineCount = "Lines cleared: " + game.getPlan().getLineClearCount();
-        int size = this.getHeight() / 20;
-        int yStart = this.getHeight() - size;
-        g.setFont(new Font("LineCountFont", Font.PLAIN, size));
-        g.setColor(FONT_COLOR);
-        g.drawString(lineCount, 0, yStart);
-
         // Draw next piece
         List<int[][]> pieces = PlanVisual.getNextPiece(game.getPlan());
         xStart = xOffset + (board.length + 1) * s; // + 1 for a 1 square wide space between board and hold piece
-        yStart = 0;
+        int yStart = 0;
         for (int[][] p : pieces) {
             yStart = drawPiece(p, xStart, yStart, g, s).y;
             yStart += s / 3;
         }
+
+        // Draw line count
+        String lineCount = "Lines cleared: " + game.getPlan().getLineClearCount();
+        int size = this.getHeight() / 20;
+        yStart = this.getHeight() - size;
+        g.setFont(new Font("LineCountFont", Font.PLAIN, size));
+        g.setColor(FONT_COLOR);
+        g.drawString(lineCount, 0, yStart);
     }
 
     private void drawBoard(int[][] board, int xStart, int yStart, Graphics g, int s, Color pieceColor) {
         int yErrorFactor = TetrisPlan.HEIGHT - 20; // Ensures that there are always 20 visible lines by hiding the rest
         for (int x = 0; x < board.length; x++) {
             for (int y = yErrorFactor; y < board[0].length; y++) {
-                g.setColor(GRID_COLOR);
-                g.drawRect(xStart + x * s, yStart + (y - yErrorFactor) * s, s, s);
                 if (board[x][y] == -1) {
                     continue;
                 }
                 if (pieceColor == null) {
                     g.setColor(pieceColors[board[x][y]]);
                 } else {
+                    g.setColor(BG);
+                    g.fillRect(xStart + x * s, yStart + (y - yErrorFactor) * s, s, s);
                     g.setColor(pieceColor);
                 }
                 g.fillRect(xStart + x * s, yStart + (y - yErrorFactor) * s, s, s);
@@ -150,6 +158,10 @@ public class TetrisWidget extends JComponent {
             for (int y = 0; y < piece[0].length; y++) {
                 g.setColor(GRID_COLOR);
                 g.drawRect(xStart + x * s, yStart + y * s, s, s);
+            }
+        }
+        for (int x = 0; x < piece.length; x++) {
+            for (int y = 0; y < piece[0].length; y++) {
                 if (piece[x][y] == -1) {
                     continue;
                 }
