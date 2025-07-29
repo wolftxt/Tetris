@@ -198,6 +198,7 @@ public class TetrisGame {
                     while (plan.isPlaying() && leftRight == 0) {
                         LockSupport.park();
                     }
+                    Thread.interrupted();
                     synchronized (this) {
                         if (plan.move(leftRight, 0)) {
                             checkSoftDrop();
