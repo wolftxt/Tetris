@@ -99,17 +99,17 @@ public class TetrisWidget extends JComponent {
         int xStart = xOffset;
         drawBoard(board, xStart, 0, g, s, null);
 
-        // Draw current piece
-        int[][] piece = PlanVisual.getCurrentPiece(game.getPlan());
-        xStart = xOffset;
-        drawBoard(piece, xStart, 0, g, s, null);
-
         // Draw piece shadow
-        piece = PlanVisual.getPieceShadow(game.getPlan());
+        int[][] piece = PlanVisual.getPieceShadow(game.getPlan());
         int index = game.getPlan().getPiece().getIndex();
         Color c = pieceColors[index];
         Color opaque = new Color(c.getRed(), c.getGreen(), c.getBlue(), settings.SHADOW_PIECE_ALPHA_VALUE);
         drawBoard(piece, xStart, 0, g, s, opaque);
+
+        // Draw current piece
+        piece = PlanVisual.getCurrentPiece(game.getPlan());
+        xStart = xOffset;
+        drawBoard(piece, xStart, 0, g, s, null);
 
         // Draw hold piece
         piece = PlanVisual.getHoldPiece(game.getPlan());
