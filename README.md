@@ -1,6 +1,6 @@
 # Tetris
 
-A classic Tetris clone built with Java and Swing. It features a highly customizable gameplay experience with persistent settings.
+A modern Tetris clone built with Java and Swing. It features a highly customizable gameplay experience with persistent settings.
 To play use [GameLauncher](https://github.com/wolftxt/GameLauncher).
 
 ![Game Screenshot](screenshot.png)

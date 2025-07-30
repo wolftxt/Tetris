@@ -9,7 +9,8 @@ import tetris.view.TetrisWidget;
 
 /**
  * Controller used to handle game logic, game loop and user inputs like soft
- * dropping, hard dropping, rotating, moving left and right.
+ * dropping, hard dropping, rotating, moving left and right. Uses
+ * synchronization to prevent race conditions
  *
  * @author davidwolf
  */
@@ -220,7 +221,7 @@ public class TetrisGame {
                     Thread.sleep(gs.DAS);
                     while (!Thread.interrupted() && plan.isPlaying()) {
                         while (plan.isPlaying() && !isLRlegal) {
-                            LockSupport.park();
+                            LockSupport.park(); // Ensures that threads keeps trying to move the direction without freezin ghte program
                             if (Thread.interrupted()) {
                                 throw new InterruptedException("");
                             }
@@ -250,7 +251,7 @@ public class TetrisGame {
 
     private void placePiece() {
         plan.placePiece();
-        if (!plan.newPiece()) {
+        if (!plan.newPiece()) { // ensures the game terminates immediately when the player tops out
             leftRightThread.interrupt();
             gameLoopThread.interrupt();
         }
@@ -278,7 +279,7 @@ public class TetrisGame {
 
     public void repaint() {
         SwingUtilities.invokeLater(() -> {
-            synchronized (TetrisGame.this) {
+            synchronized (TetrisGame.this) { // prevents reading illegal state
                 callback.repaint();
             }
         });
